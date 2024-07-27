@@ -18,6 +18,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import co.edu.unab.etdm.eden.storeapp.LoginViewModel
 import co.edu.unab.etdm.eden.storeapp.MainActivity
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
@@ -39,10 +41,11 @@ import coil.compose.AsyncImage
 
 //@Preview(showBackground = true)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
+    //LoginViewModel
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderScreen()
-        BodyLogin(navController = navController)
+        BodyLogin(navController = navController, viewModel = viewModel)
         FooterLogin()
     }
 }
@@ -73,37 +76,31 @@ fun HeaderScreen() {
 }
 
 @Composable
-fun BodyLogin(navController: NavController) {
-    var emailValue: String by rememberSaveable {
-        mutableStateOf("")
-    }
-    var passwordValue: String by rememberSaveable {
-        mutableStateOf("")
-    }
-    var isLogin: Boolean by remember {
-        mutableStateOf(false)
-    }
-    var isError: Boolean by remember {
-        mutableStateOf(false)
-    }
+fun BodyLogin(navController: NavController, viewModel: LoginViewModel) {
+    //observeasstate
+
+    val emailValue: String by viewModel.email.observeAsState(initial = "")
+    val passwordValue: String by viewModel.password.observeAsState(initial = "")
+    val isLogin: Boolean by viewModel.isLogin.observeAsState(initial = false)
+    val isError: Boolean by viewModel.isError.observeAsState(initial = false)
 
     val context: Context = LocalContext.current
 
-    if(isLogin) {
+    if (isLogin) {
         Toast.makeText(context, "Iniciando sesion...", Toast.LENGTH_SHORT).show()
-        isLogin = false
+        viewModel.onIsLoginChange(false)
         val intent = Intent(context, MainActivity::class.java)
         context.startActivity(intent)
         (context as Activity).finish()
-    } else if(isError) {
+    } else if (isError) {
         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-        isError = false
+        viewModel.onIsErrorChange(false)
     }
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (tfEmail, tfPass, btnLogin) = createRefs()
 
         TextField(value = emailValue,
-            onValueChange = { emailValue = it },
+            onValueChange = { viewModel.onEmailChanged(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(tfEmail) {
@@ -115,7 +112,7 @@ fun BodyLogin(navController: NavController) {
 
         TextField(
             value = passwordValue,
-            onValueChange = { passwordValue = it },
+            onValueChange = { viewModel.onPasswordChanged(it) },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "lock password")
             },
@@ -136,8 +133,9 @@ fun BodyLogin(navController: NavController) {
         Button(onClick = {
             //navigate to registerScreen
             //navController.navigate(StoreAppDestinations.RegisterDestination.route)
-            isLogin = verifyLogin(email = emailValue, password = passwordValue)
-            isError =!isLogin
+            viewModel.verifyLogin()
+            viewModel.isLogin.value?.let { viewModel.onIsErrorChange(!it) }
+                ?: viewModel.onIsErrorChange(true)
         }, modifier = Modifier.constrainAs(btnLogin) {
             top.linkTo(tfPass.bottom, margin = 20.dp)
             start.linkTo(parent.start)
@@ -180,13 +178,9 @@ fun FooterLogin() {
 
 }
 
-fun verifyLogin(email: String, password: String): Boolean {
-    return (email == getUser().email && password == getUser().password)
-}
 
-private fun getUser(): User {
-    return User(email = "1", password = "1")
-}
+
+
 
 
 

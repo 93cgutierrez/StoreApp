@@ -78,6 +78,12 @@ dependencies {
     implementation(libs.coil.compose)
 
     //navigation
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    //LiveData compose state
+    implementation(libs.androidx.runtime.livedata)
+
+    //corutine
+    //flow
+    //room
 }

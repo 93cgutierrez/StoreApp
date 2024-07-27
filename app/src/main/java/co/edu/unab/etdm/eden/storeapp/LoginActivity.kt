@@ -66,7 +66,7 @@ class LoginActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = StoreAppDestinations.LoginDestination.route) {
                     composable(StoreAppDestinations.LoginDestination.route) {
-                        LoginScreen(navController)
+                        LoginScreen(navController, LoginViewModel())
                     }
                     composable(StoreAppDestinations.RegisterDestination.route) {
                         RegisterScreen(navController)
