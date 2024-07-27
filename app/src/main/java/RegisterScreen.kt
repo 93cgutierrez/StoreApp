@@ -10,27 +10,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import co.edu.unab.etdm.eden.storeapp.R
 import coil.compose.AsyncImage
 
-@Preview(showBackground = true)
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderRegister()
-        BodyRegister()
+        BodyRegister(navController)
     }
 }
 
 
-
 @Composable
-fun BodyRegister() {
+fun BodyRegister(navController: NavController) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (tfEmail, tfPass, btnLogin) = createRefs()
+        val (tfName, tfEmail, tfPass, btnLogin) = createRefs()
+        TextField(value = "",
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfName) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
+            placeholder = { Text(text = stringResource(R.string.txt_placeholder_email_login)) })
         TextField(value = "",
             onValueChange = {},
             modifier = Modifier
@@ -40,31 +48,33 @@ fun BodyRegister() {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-            placeholder = { Text(text = stringResource(R.string.txt_paceholder_email_login)) })
+            placeholder = { Text(text = stringResource(R.string.txt_placeholder_email_login)) })
 
-        TextField(value = "",
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(tfPass) {
-                    top.linkTo(tfEmail.bottom, margin = 20.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-            placeholder = { Text(text = stringResource(R.string.txt_placeholder_password_login)) })
+        /*        TextField(value = "",
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(tfPass) {
+                            top.linkTo(tfEmail.bottom, margin = 20.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
+                    placeholder = { Text(text = stringResource(R.string.txt_placeholder_password_login)) })*/
 
-        TextField(value = "",
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(tfPass) {
-                    top.linkTo(tfEmail.bottom, margin = 20.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-            placeholder = { Text(text = stringResource(R.string.txt_register_confirm_password)) })
+        /*        TextField(value = "",
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(tfPass) {
+                            top.linkTo(tfEmail.bottom, margin = 20.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
+                    placeholder = { Text(text = stringResource(R.string.txt_register_confirm_password)) })*/
 
-        Button(onClick = { }, modifier = Modifier.constrainAs(btnLogin) {
+        Button(onClick = {
+            navController.popBackStack()
+        }, modifier = Modifier.constrainAs(btnLogin) {
             top.linkTo(tfPass.bottom, margin = 20.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)

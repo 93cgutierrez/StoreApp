@@ -2,8 +2,8 @@
     <string name="app_name">StoreApp</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="txt_login_title">Iniciar Sesión</string>
-    <string name="txt_paceholder_email_login">Ingresa tu correo</string>
-    <string name="txt_placeholder_password_login">Escribe tu contraseña</string>
+    <string name="txt_placeholder_email_login">Ingresa tu correo</string>
+    <string name="txt_placeholder_password_login">Ingresa tu contraseña</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="txt_register_tittle">Registrar</string>
     <string name="txt_btn_register">Registrar</string>

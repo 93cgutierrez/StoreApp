@@ -76,4 +76,8 @@ dependencies {
 
     //compose image load
     implementation(libs.coil.compose)
+
+    //navigation
+
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 }

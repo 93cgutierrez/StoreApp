@@ -20,7 +20,7 @@ class RegisterActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            RegisterScreen()
+            //RegisterScreen()
 
         }
     }

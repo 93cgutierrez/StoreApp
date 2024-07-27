@@ -1,6 +1,7 @@
 package co.edu.unab.etdm.eden.storeapp
 
 import LoginScreen
+import RegisterScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import co.edu.unab.etdm.eden.storeapp.ui.ui.theme.StoreAppTheme
 
 class LoginActivity : ComponentActivity() {
@@ -58,7 +62,16 @@ class LoginActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StoreAppTheme {
-                LoginScreen()
+                // navigation
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = StoreAppDestinations.LoginDestination.route) {
+                    composable(StoreAppDestinations.LoginDestination.route) {
+                        LoginScreen(navController)
+                    }
+                    composable(StoreAppDestinations.RegisterDestination.route) {
+                        RegisterScreen(navController)
+                    }
+                }
             }
         }
     }
