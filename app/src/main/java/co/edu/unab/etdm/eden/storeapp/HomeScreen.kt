@@ -1,30 +1,44 @@
 package co.edu.unab.etdm.eden.storeapp
 
 import Product
-import androidx.compose.foundation.background
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
+import coil.size.Size
 
 @Composable
 fun HomeScreen(modifier: Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Text(text = "Home Screen", Modifier.align(Alignment.Center))
+    LazyColumn(
+        modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        val products = getFakeProducts()
+        items(products.size) {
+            ProductItem(product = products[it])
+        }
     }
 }
 
@@ -33,8 +47,11 @@ fun HomeScreen(modifier: Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductItem(product: Product) {
+    val context: Context = LocalContext.current
     Card(
-        onClick = { },
+        onClick = {
+            Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .size(200.dp),
@@ -42,11 +59,19 @@ fun ProductItem(product: Product) {
         ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (imgProduct, nameProduct, priceProduct) = createRefs()
-            AsyncImage(
-                model = product.image,
+            SubcomposeAsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(product.image)
+                    .size(Size.ORIGINAL) // Set the target size to load the image at.
+                    .error(R.drawable.ic_error)
+                    .build(),
+                loading = {
+                    CircularProgressIndicator()
+                },
                 contentDescription = product.name,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .border(2.dp, Color.Black)
+                    .border(2.dp, Color.Transparent)
                     .size(100.dp)
                     .constrainAs(imgProduct) {
                         top.linkTo(parent.top)
@@ -76,7 +101,7 @@ fun ProductItem(product: Product) {
 @Preview(showBackground = true)
 @Composable
 fun ProductList() {
-    ProductItem(getFakeProducts().first())
+    ProductItem(getFakeProducts().last())
 }
 
 //ProductList UI composable
@@ -84,10 +109,27 @@ fun ProductList() {
 //getFakeProducts
 fun getFakeProducts(): List<Product> {
     return listOf(
-        Product("keyboard", 300000),
+        Product(
+            "keyboard",
+            150000,
+            "This is a good keyboard",
+            "https://my-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/4/P/4P4F6AA-1_T1678954122.png",
+        ),
+        Product(
+            "mouse pad",
+            20000,
+            "This is a good keyboard",
+            "https://my-media.hhhhyyyyhhhhhhhhhhhhhhhhhhh",
+        ),
         Product("Mouse", 200000),
         Product("Monitor", 500000),
         Product("Mouse Gaming", 350000),
         Product("laptop", 300000),
+        Product(
+            "power sources",
+            450000,
+            "This is better than normal power sources",
+            "https://seasonic.com/wp-content/uploads/2024/02/a12-600-500-back-panel-angled-300x222.png",
+        ),
     )
 }
