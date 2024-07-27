@@ -1,3 +1,7 @@
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,10 +19,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import co.edu.unab.etdm.eden.storeapp.MainActivity
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import coil.compose.AsyncImage
@@ -67,14 +74,34 @@ fun HeaderScreen() {
 
 @Composable
 fun BodyLogin(navController: NavController) {
+    var emailValue: String by rememberSaveable {
+        mutableStateOf("")
+    }
+    var passwordValue: String by rememberSaveable {
+        mutableStateOf("")
+    }
+    var isLogin: Boolean by remember {
+        mutableStateOf(false)
+    }
+    var isError: Boolean by remember {
+        mutableStateOf(false)
+    }
+
+    val context: Context = LocalContext.current
+
+    if(isLogin) {
+        Toast.makeText(context, "Iniciando sesion...", Toast.LENGTH_SHORT).show()
+        isLogin = false
+        val intent = Intent(context, MainActivity::class.java)
+        context.startActivity(intent)
+        (context as Activity).finish()
+    } else if(isError) {
+        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+        isError = false
+    }
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (tfEmail, tfPass, btnLogin) = createRefs()
-        var emailValue: String by rememberSaveable {
-            mutableStateOf("")
-        }
-        var passwordValue: String by rememberSaveable {
-            mutableStateOf("")
-        }
+
         TextField(value = emailValue,
             onValueChange = { emailValue = it },
             modifier = Modifier
@@ -108,7 +135,9 @@ fun BodyLogin(navController: NavController) {
 
         Button(onClick = {
             //navigate to registerScreen
-            navController.navigate(StoreAppDestinations.RegisterDestination.route)
+            //navController.navigate(StoreAppDestinations.RegisterDestination.route)
+            isLogin = verifyLogin(email = emailValue, password = passwordValue)
+            isError =!isLogin
         }, modifier = Modifier.constrainAs(btnLogin) {
             top.linkTo(tfPass.bottom, margin = 20.dp)
             start.linkTo(parent.start)
@@ -121,9 +150,11 @@ fun BodyLogin(navController: NavController) {
 
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun FooterLogin() {
+    //TODO: 20240727 PENDING FINISH LINK
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,5 +179,14 @@ fun FooterLogin() {
     }
 
 }
+
+fun verifyLogin(email: String, password: String): Boolean {
+    return (email == getUser().email && password == getUser().password)
+}
+
+private fun getUser(): User {
+    return User(email = "1", password = "1")
+}
+
 
 
