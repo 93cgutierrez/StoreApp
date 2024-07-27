@@ -1,6 +1,13 @@
 package co.edu.unab.etdm.eden.storeapp
 
 sealed class StoreAppDestinations(val title: String, val route: String) {
-    data object LoginDestination : StoreAppDestinations("login", "login")
-    data object RegisterDestination : StoreAppDestinations("register", "register")
+    data object LoginDestination : StoreAppDestinations("Login", "login")
+    data object RegisterDestination : StoreAppDestinations("Register", "register")
+    data object HomeDestination : StoreAppDestinations("Products", "home")
+    data object ProfileDestination : StoreAppDestinations("My profile", "profile")
+    data object ProductDetailDestination : StoreAppDestinations("Product Details", "product_detail")
+
+    companion object {
+        val mainScreens = listOf<StoreAppDestinations>(HomeDestination, ProfileDestination)
+    }
 }

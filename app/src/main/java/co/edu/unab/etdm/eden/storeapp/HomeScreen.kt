@@ -22,12 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 
 @Composable
-fun HomeScreen(modifier: Modifier) {
+fun HomeScreen(navController: NavHostController, modifier: Modifier) {
     val products = getFakeProducts()
     val context: Context = LocalContext.current
     LazyColumn(
@@ -37,10 +38,10 @@ fun HomeScreen(modifier: Modifier) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        items(products.size) {
-            index ->
+        items(products.size) { index ->
             ProductItem(product = products[index]) { productValue ->
                 Toast.makeText(context, "$index Item: ${productValue}", Toast.LENGTH_SHORT).show()
+                navController.navigate(StoreAppDestinations.ProfileDestination.route)
             }
         }
     }
@@ -54,7 +55,7 @@ fun ProductItem(product: Product, onSelected: (Product) -> Unit) {
     val context: Context = LocalContext.current
     Card(
         onClick = {
-            Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
             onSelected(product)
         },
         modifier = Modifier
