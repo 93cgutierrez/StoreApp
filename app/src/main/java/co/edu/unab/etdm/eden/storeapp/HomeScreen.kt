@@ -22,22 +22,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 
 @Composable
 fun HomeScreen(modifier: Modifier) {
+    val products = getFakeProducts()
+    val context: Context = LocalContext.current
     LazyColumn(
         modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        val products = getFakeProducts()
+
         items(products.size) {
-            ProductItem(product = products[it])
+            index ->
+            ProductItem(product = products[index]) { productValue ->
+                Toast.makeText(context, "$index Item: ${productValue}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
@@ -46,11 +50,12 @@ fun HomeScreen(modifier: Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(product: Product, onSelected: (Product) -> Unit) {
     val context: Context = LocalContext.current
     Card(
         onClick = {
             Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
+            onSelected(product)
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -101,7 +106,7 @@ fun ProductItem(product: Product) {
 @Preview(showBackground = true)
 @Composable
 fun ProductList() {
-    ProductItem(getFakeProducts().last())
+    ProductItem(getFakeProducts().last()) {}
 }
 
 //ProductList UI composable
