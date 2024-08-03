@@ -1,6 +1,6 @@
 package co.edu.unab.etdm.eden.storeapp
 
-import LoginScreen
+import co.edu.unab.etdm.eden.storeapp.login.screen.LoginScreen
 import RegisterScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -27,6 +27,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import co.edu.unab.etdm.eden.storeapp.login.viewmodel.LoginViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.ui.theme.StoreAppTheme
 
 class LoginActivity : ComponentActivity() {

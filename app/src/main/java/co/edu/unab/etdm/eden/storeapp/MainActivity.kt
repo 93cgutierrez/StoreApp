@@ -31,6 +31,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import co.edu.unab.etdm.eden.storeapp.home.screen.HomeScreen
+import co.edu.unab.etdm.eden.storeapp.home.viewmodel.HomeViewModel
+import co.edu.unab.etdm.eden.storeapp.product.screen.ProductDetailScreen
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -110,10 +113,16 @@ class MainActivity : ComponentActivity() {
                         startDestination = StoreAppDestinations.HomeDestination.route
                     ) {
                         composable(StoreAppDestinations.HomeDestination.route) {
-                            HomeScreen(navController, Modifier.padding(innerPadding))
+                            HomeScreen(navController, Modifier.padding(innerPadding), HomeViewModel())
                         }
                         composable(StoreAppDestinations.ProfileDestination.route) {
                             ProfileScreen()
+                        }
+                        composable(StoreAppDestinations.ProductDetailDestination.route) {
+                            ProductDetailScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                product = xx,
+                            )
                         }
                     }
                 }

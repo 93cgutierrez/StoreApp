@@ -1,3 +1,5 @@
+package co.edu.unab.etdm.eden.storeapp.login.screen
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -19,10 +21,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -33,10 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import co.edu.unab.etdm.eden.storeapp.LoginViewModel
+import co.edu.unab.etdm.eden.storeapp.login.viewmodel.LoginViewModel
 import co.edu.unab.etdm.eden.storeapp.MainActivity
 import co.edu.unab.etdm.eden.storeapp.R
-import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import coil.compose.AsyncImage
 
 //@Preview(showBackground = true)

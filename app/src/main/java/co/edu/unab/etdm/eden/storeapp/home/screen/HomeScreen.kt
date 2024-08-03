@@ -1,6 +1,6 @@
-package co.edu.unab.etdm.eden.storeapp
+package co.edu.unab.etdm.eden.storeapp.home.screen
 
-import Product
+import co.edu.unab.etdm.eden.storeapp.product.model.Product
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border
@@ -15,6 +15,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -23,25 +25,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import co.edu.unab.etdm.eden.storeapp.R
+import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
+import co.edu.unab.etdm.eden.storeapp.home.viewmodel.HomeViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 
 @Composable
-fun HomeScreen(navController: NavHostController, modifier: Modifier) {
-    val products = getFakeProducts()
+fun HomeScreen(
+    navController: NavHostController,
+    modifier: Modifier, viewModel: HomeViewModel
+) {
+    val products: List<Product> by viewModel.productList.observeAsState(initial = emptyList())
     val context: Context = LocalContext.current
+    if (products.isEmpty()) {
+        viewModel.loadFakeProductList()
+        return
+    }
     LazyColumn(
         modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-
         items(products.size) { index ->
             ProductItem(product = products[index]) { productValue ->
                 Toast.makeText(context, "$index Item: ${productValue}", Toast.LENGTH_SHORT).show()
-                navController.navigate(StoreAppDestinations.ProfileDestination.route)
+                //navigate to productDetailScreen pass productId
+                navController.navigate(StoreAppDestinations.ProductDetailDestination(product.id))
             }
         }
     }
@@ -104,38 +116,5 @@ fun ProductItem(product: Product, onSelected: (Product) -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ProductList() {
-    ProductItem(getFakeProducts().last()) {}
-}
-
 //ProductList UI composable
 
-//getFakeProducts
-fun getFakeProducts(): List<Product> {
-    return listOf(
-        Product(
-            "keyboard",
-            150000,
-            "This is a good keyboard",
-            "https://my-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/4/P/4P4F6AA-1_T1678954122.png",
-        ),
-        Product(
-            "mouse pad",
-            20000,
-            "This is a good keyboard",
-            "https://my-media.hhhhyyyyhhhhhhhhhhhhhhhhhhh",
-        ),
-        Product("Mouse", 200000),
-        Product("Monitor", 500000),
-        Product("Mouse Gaming", 350000),
-        Product("laptop", 300000),
-        Product(
-            "power sources",
-            450000,
-            "This is better than normal power sources",
-            "https://seasonic.com/wp-content/uploads/2024/02/a12-600-500-back-panel-angled-300x222.png",
-        ),
-    )
-}

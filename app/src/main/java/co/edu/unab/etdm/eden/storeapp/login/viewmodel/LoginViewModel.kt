@@ -1,6 +1,6 @@
-package co.edu.unab.etdm.eden.storeapp
+package co.edu.unab.etdm.eden.storeapp.login.viewmodel
 
-import User
+import co.edu.unab.etdm.eden.storeapp.login.model.User
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

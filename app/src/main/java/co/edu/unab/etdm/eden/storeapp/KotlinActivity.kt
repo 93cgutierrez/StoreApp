@@ -1,8 +1,8 @@
 package co.edu.unab.etdm.eden.storeapp
 
-import Product
+import co.edu.unab.etdm.eden.storeapp.product.model.Product
 import ProductDiscount
-import User
+import co.edu.unab.etdm.eden.storeapp.login.model.User
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log

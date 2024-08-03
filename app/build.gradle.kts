@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    //parcelable
+    id("kotlin-parcelize")
+    //serialization
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -83,7 +87,10 @@ dependencies {
     //LiveData compose state
     implementation(libs.androidx.runtime.livedata)
 
-    //corutine
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //coroutine
     //flow
     //room
 }

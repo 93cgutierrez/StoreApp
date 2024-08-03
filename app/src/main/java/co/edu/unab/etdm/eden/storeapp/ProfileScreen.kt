@@ -15,6 +15,9 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+        //homework
+        //crear screen como filas mostrndo info user email pass name
+        //terminar profile
         Text(text = "Profile Screen", modifier = Modifier.align(Alignment.Center))
     }
 }
