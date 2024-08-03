@@ -33,7 +33,7 @@ import coil.size.Size
 
 @Composable
 fun ProductDetailScreen(
-    productId: Int, product: Product, navController: NavHostController,
+    productId: Int, product: Product?, navController: NavHostController,
     modifier: Modifier,
     viewModel: ProductDetailViewModel
 ) {
@@ -41,17 +41,19 @@ fun ProductDetailScreen(
         .observeAsState(initial = Product(0, "", 0))
 
     val context: Context = LocalContext.current
-    viewModel.loadProduct(productId)
-    if (product.id != 0) {
+
+    if (productItem.id != 0) {
         Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
+    } else {
+        viewModel.loadProduct(productId)
     }
 
     Column {
         //images
-        ProductImages(
+/*        ProductImages(
             modifier = modifier.fillMaxSize(),
             product = product
-        )
+        )*/
         //price
         //quantity
         //add to cart button

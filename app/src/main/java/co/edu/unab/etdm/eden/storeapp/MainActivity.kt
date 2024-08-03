@@ -27,13 +27,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import co.edu.unab.etdm.eden.storeapp.home.screen.HomeScreen
 import co.edu.unab.etdm.eden.storeapp.home.viewmodel.HomeViewModel
 import co.edu.unab.etdm.eden.storeapp.product.screen.ProductDetailScreen
+import co.edu.unab.etdm.eden.storeapp.product.viewmodel.ProductDetailViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -67,7 +70,8 @@ class MainActivity : ComponentActivity() {
                                 selected = StoreAppDestinations.HomeDestination.route == currentScreen.route,
                                 onClick = {
                                     Toast.makeText(context, "home", Toast.LENGTH_SHORT).show()
-                                    navController.navigate(StoreAppDestinations.HomeDestination.route) {
+                                    navController.navigate(StoreAppDestinations
+                                        .HomeDestination.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
@@ -113,16 +117,28 @@ class MainActivity : ComponentActivity() {
                         startDestination = StoreAppDestinations.HomeDestination.route
                     ) {
                         composable(StoreAppDestinations.HomeDestination.route) {
-                            HomeScreen(navController, Modifier.padding(innerPadding), HomeViewModel())
+                            HomeScreen(
+                                navController,
+                                Modifier.padding(innerPadding),
+                                HomeViewModel()
+                            )
                         }
                         composable(StoreAppDestinations.ProfileDestination.route) {
                             ProfileScreen()
                         }
-                        composable(StoreAppDestinations.ProductDetailDestination.route) {
-                            ProductDetailScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                product = xx,
-                            )
+                        composable(StoreAppDestinations
+                            .ProductDetailDestination.route,
+                            arguments = listOf(navArgument(NavArgs.ProductId.key) { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            backStackEntry.arguments?.let { it ->
+                                ProductDetailScreen(
+                                    productId = it.getInt(NavArgs.ProductId.key),
+                                    product = null,
+                                    navController = navController,
+                                    modifier = Modifier.padding(innerPadding),
+                                    viewModel = ProductDetailViewModel(),
+                                )
+                            }
                         }
                     }
                 }

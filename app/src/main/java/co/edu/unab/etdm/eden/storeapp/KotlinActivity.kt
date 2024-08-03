@@ -19,10 +19,16 @@ class KotlinActivity : Activity() {
 
         Log.d("Login info: ", message)
 
-        var keyBoard : Product = Product(price = 5000, name = "Teclado Gamer")
-        var screen : Product = Product(price = 10000, name = "Pantalla Gamer", description = "Pantalla 60 Pulgadas 8k")
+        var keyBoard: Product = Product(id = 1, price = 5000, name = "Teclado Gamer")
+        var screen: Product = Product(
+            id = 2,
+            price = 10000,
+            name = "Pantalla Gamer",
+            description = "Pantalla 60 Pulgadas 8k"
+        )
 
-        var newScreen: ProductDiscount = ProductDiscount(name = "Pantalla Super Gamer", price = 50000, discount = 15)
+        var newScreen: ProductDiscount =
+            ProductDiscount(id = 3, name = "Pantalla Super Gamer", price = 50000, discount = 15)
 
     }
 

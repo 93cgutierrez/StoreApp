@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
@@ -53,7 +54,18 @@ fun HomeScreen(
             ProductItem(product = products[index]) { productValue ->
                 Toast.makeText(context, "$index Item: ${productValue}", Toast.LENGTH_SHORT).show()
                 //navigate to productDetailScreen pass productId
-                navController.navigate(StoreAppDestinations.ProductDetailDestination(product.id))
+                navController.navigate(
+                    StoreAppDestinations
+                        .ProductDetailDestination.createRoute(
+                            products[index].id
+                        )
+                ) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = false
+                }
             }
         }
     }
