@@ -20,4 +20,8 @@ class DatabaseModule {
         return Room.databaseBuilder(context, StoreAppDatabase::class.java, "store_app_db")
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(storeAppDatabase: StoreAppDatabase) = storeAppDatabase.productDAO()
 }

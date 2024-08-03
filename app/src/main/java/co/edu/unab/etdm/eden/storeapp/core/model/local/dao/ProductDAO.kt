@@ -13,18 +13,25 @@ import co.edu.unab.etdm.eden.storeapp.core.model.local.entity.ProductEntity
 interface ProductDAO {
 
     @Query("SELECT * FROM products")
-    fun getAllProducts(): LiveData<ProductEntity>
+    fun getAllProducts(): LiveData<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE id = :productId")
     fun getProductById(productId: Int): LiveData<ProductEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addProduct(productEntity: ProductEntity)
+    suspend fun addProduct(productEntity: ProductEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addProducts(productEntities: List<ProductEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateProduct(productEntity: ProductEntity): Int
+    suspend fun updateProduct(productEntity: ProductEntity): Int
 
     @Delete
-    fun deleteProduct(productEntity: ProductEntity)
+    suspend fun deleteProduct(productEntity: ProductEntity)
+
+    //delete all products
+    @Query("DELETE FROM products")
+    suspend fun deleteAllProducts()
 
 }

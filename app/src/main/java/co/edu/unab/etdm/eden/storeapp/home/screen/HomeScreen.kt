@@ -4,6 +4,7 @@ import co.edu.unab.etdm.eden.storeapp.product.model.Product
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +30,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
+import co.edu.unab.etdm.eden.storeapp.extension.navigateOnce
 import co.edu.unab.etdm.eden.storeapp.home.viewmodel.HomeViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -41,7 +44,7 @@ fun HomeScreen(
     val products: List<Product> by viewModel.productList.observeAsState(initial = emptyList())
     val context: Context = LocalContext.current
     if (products.isEmpty()) {
-        viewModel.loadFakeProductList()
+        //viewModel.loadFakeProductList()
         return
     }
     LazyColumn(
@@ -51,42 +54,73 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(products.size) { index ->
-            ProductItem(product = products[index]) { productValue ->
-                Toast.makeText(context, "$index Item: ${productValue}", Toast.LENGTH_SHORT).show()
-                //navigate to productDetailScreen pass productId
-                navController.navigate(
-                    StoreAppDestinations
-                        .ProductDetailDestination.createRoute(
-                            products[index].id
-                        )
-                ) {
-                 /*   popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+            ProductItem(
+                product = products[index],
+                onLongPressItem = { productValue ->
+                    Toast.makeText(
+                        context,
+                        "long press $index Item: ${productValue}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    viewModel.deleteProduct(productValue)
+                },
+                onSelected = { productValue ->
+                    Toast.makeText(
+                        context,
+                        "on press $index Item: ${productValue}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //navigate to productDetailScreen pass productId
+                    products[index].id?.let {
+                        StoreAppDestinations
+                            .ProductDetailDestination.createRoute(
+                                it
+                            )
+                    }?.let {
+                        navController.navigateOnce(
+                            it
+                        ) {
+                            /*   popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = false*/
+                        }
                     }
-                    launchSingleTop = true
-                    restoreState = false*/
-                }
-            }
+                },
+            )
         }
     }
 }
+
 
 //productItem UI composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductItem(product: Product, onSelected: (Product) -> Unit) {
+fun ProductItem(
+    product: Product,
+    onSelected: (Product) -> Unit,
+    onLongPressItem: (Product) -> Unit
+) {
     val context: Context = LocalContext.current
     Card(
-        onClick = {
-            //Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
-            onSelected(product)
-        },
         modifier = Modifier
             .fillMaxWidth()
-            .size(200.dp),
-
-        ) {
+            .size(200.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        //Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
+                        onSelected(product)
+                    },
+                    onLongPress = {
+                        //Toast.makeText(context, "Long press ${product.name}", Toast.LENGTH_SHORT).show()
+                        onLongPressItem(product)
+                    }
+                )
+            }
+    ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (imgProduct, nameProduct, priceProduct) = createRefs()
             SubcomposeAsyncImage(

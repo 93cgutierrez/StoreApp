@@ -29,11 +29,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
+import androidx.navigation.NavArgument
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -56,7 +54,7 @@ import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
+    private val tag = "HomeScreen"
     private val homeViewModel: HomeViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val productDetailViewModel: ProductDetailViewModel by viewModels()
@@ -71,6 +69,8 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(baseContext, "Hi", Toast.LENGTH_SHORT).show()
             }
         }
+        homeViewModel.deleteAllProducts()
+        homeViewModel.loadFakeProductList()
         setContent {
             val context: Context = LocalContext.current
             val navController = rememberNavController()
@@ -122,11 +122,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 label = {
-                                    Text(text = "Home",
+                                    Text(
+                                        text = "Home",
                                         color = if (StoreAppDestinations.ProfileDestination.route
                                             == currentScreen.route
                                         )
-                                            Color.White else Color.White)
+                                            Color.White else Color.White
+                                    )
                                 })
                             NavigationBarItem(
                                 selected = StoreAppDestinations.ProfileDestination.route == currentScreen.route,
@@ -183,11 +185,18 @@ class MainActivity : ComponentActivity() {
                             })
                         ) {
                             //log
-                            val TAG = "HomeScreen"
-                            Log.d(TAG, "NAV INIT")
+                            Log.d(tag, "NAV INIT")
                             it.arguments?.let { it1 ->
+                                val productId: Int = it1.getInt(NavArgs.ProductId.key)
+                                val productId2: NavArgument? = navController.currentDestination?.arguments?.get(NavArgs.ProductId.key)
+                                if (navController.currentDestination?.route == StoreAppDestinations
+                                        .ProductDetailDestination.createRoute(productId)
+                                ) {
+                                    return@composable
+                                }
+                                Log.d(tag, "NAV1")
                                 ProductDetailScreen(
-                                    productId = it1.getInt(NavArgs.ProductId.key),
+                                    productId = productId,
                                     product = null,
                                     navController = navController,
                                     modifier = Modifier.padding(innerPadding),

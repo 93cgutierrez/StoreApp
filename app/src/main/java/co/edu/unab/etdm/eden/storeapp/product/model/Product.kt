@@ -1,6 +1,7 @@
 package co.edu.unab.etdm.eden.storeapp.product.model
 
 import android.os.Parcelable
+import co.edu.unab.etdm.eden.storeapp.core.model.local.entity.ProductEntity
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -8,13 +9,13 @@ import kotlinx.serialization.Serializable
 //@Parcelize
 //@Serializable
 open class Product(
-    var id: Int,  // Unique identifier for each product. In a real-world scenario, this would be a database ID.
+    var id: Int? = null,  // Unique identifier for each product. In a real-world scenario, this would be a database ID.
     var name: String,
     var price: Int,
     var description: String = "Sin descripción",
     var image: String = "https://www.libreriahuequito.com/public/images/productos/default.png"
 )
-  //  : Parcelable
+//  : Parcelable
 {
 
     override fun toString(): String {
@@ -22,3 +23,20 @@ open class Product(
     }
 
 }
+
+//extension
+fun ProductEntity.toProduct(): Product = Product(
+    id = this.id ?: 0,
+    name = this.name,
+    price = this.price,
+    image = this.image,
+    description = this.description,
+)
+
+fun Product.toProductEntity(): ProductEntity = ProductEntity(
+    id = this.id,
+    name = this.name,
+    price = this.price,
+    image = this.image,
+    description = this.description,
+)

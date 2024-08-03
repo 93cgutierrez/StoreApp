@@ -11,6 +11,7 @@ private fun NavHostController.navigateOnce(route: String) {
     }
 }
 
+
 private fun NavHostController.navigateOnce(
     route: String,
     builder: NavOptionsBuilder.() -> Unit
@@ -20,17 +21,10 @@ private fun NavHostController.navigateOnce(
     }
 }
 
-private fun NavController.navigateOnce(route: String) {
-    if (this.currentDestination?.route !== route) {
-        this.navigate(route)
-    }
-}
-
-private fun NavController.navigateOnce(
-    route: String,
-    builder: NavOptionsBuilder.() -> Unit
-) {
-    if (this.currentDestination?.route !== route) {
-        this.navigate(route, builder)
+fun NavHostController.navigateOnce(createRoute: String, function: () -> Unit) {
+    if (this.currentDestination?.route !== createRoute) {
+        this.navigate(createRoute) {
+            function()
+        }
     }
 }

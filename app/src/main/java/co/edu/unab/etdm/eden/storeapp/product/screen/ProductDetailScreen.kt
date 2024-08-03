@@ -38,11 +38,11 @@ fun ProductDetailScreen(
     viewModel: ProductDetailViewModel
 ) {
     val productItem: Product by viewModel.product
-        .observeAsState(initial = Product(0, "", 0))
+        .observeAsState(initial = Product(name = "", price = 0))
 
     val context: Context = LocalContext.current
 
-    if (productItem.id != 0) {
+    if (productItem.id != null) {
         Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
     } else {
         viewModel.loadProduct(productId)
@@ -50,10 +50,10 @@ fun ProductDetailScreen(
 
     Column {
         //images
-/*        ProductImages(
-            modifier = modifier.fillMaxSize(),
-            product = product
-        )*/
+        /*        ProductImages(
+                    modifier = modifier.fillMaxSize(),
+                    product = product
+                )*/
         //price
         //quantity
         //add to cart button
