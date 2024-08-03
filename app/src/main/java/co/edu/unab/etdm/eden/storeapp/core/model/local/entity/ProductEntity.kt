@@ -1,4 +1,4 @@
-package co.edu.unab.etdm.eden.storeapp.core.model.entity
+package co.edu.unab.etdm.eden.storeapp.core.model.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

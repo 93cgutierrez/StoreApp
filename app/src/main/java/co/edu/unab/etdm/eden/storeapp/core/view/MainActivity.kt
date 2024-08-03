@@ -30,8 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,10 +49,12 @@ import co.edu.unab.etdm.eden.storeapp.product.viewmodel.ProductDetailViewModel
 import co.edu.unab.etdm.eden.storeapp.profile.screen.ProfileScreen
 import co.edu.unab.etdm.eden.storeapp.profile.viewmodel.ProfileViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
