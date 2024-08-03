@@ -3,8 +3,11 @@ package co.edu.unab.etdm.eden.storeapp.product.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import co.edu.unab.etdm.eden.storeapp.product.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +25,7 @@ class ProductDetailViewModel @Inject constructor(): ViewModel() {
 
         // Load product from API or database
         _product.value = products.find { it.id == productId }
+
     }
 
     private fun loadFakeProductList(): List<Product> {

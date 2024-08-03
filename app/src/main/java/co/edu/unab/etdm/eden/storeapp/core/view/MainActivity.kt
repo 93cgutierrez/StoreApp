@@ -27,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -44,6 +47,9 @@ import co.edu.unab.etdm.eden.storeapp.product.viewmodel.ProductDetailViewModel
 import co.edu.unab.etdm.eden.storeapp.profile.screen.ProfileScreen
 import co.edu.unab.etdm.eden.storeapp.profile.viewmodel.ProfileViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
 
@@ -55,6 +61,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        //coroutine
+        lifecycleScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(baseContext, "Hi", Toast.LENGTH_SHORT).show()
+            }
+        }
         setContent {
             val context: Context = LocalContext.current
             val navController = rememberNavController()
@@ -76,7 +88,11 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     bottomBar = {
-                        NavigationBar(containerColor = Color.Blue, contentColor = Color.White) {
+                        NavigationBar(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                            tonalElevation = 8.dp
+                        ) {
                             NavigationBarItem(
                                 selected = StoreAppDestinations.HomeDestination.route == currentScreen.route,
                                 onClick = {
@@ -95,6 +111,10 @@ class MainActivity : ComponentActivity() {
                                     Icon(
                                         imageVector = Icons.Filled.Home,
                                         contentDescription = "home",
+                                        tint = if (StoreAppDestinations.HomeDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.Blue else Color.White,
                                     )
                                 },
                                 label = {
@@ -116,6 +136,10 @@ class MainActivity : ComponentActivity() {
                                     Icon(
                                         imageVector = Icons.Filled.Person,
                                         contentDescription = "profile",
+                                        tint = if (StoreAppDestinations.ProfileDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.Blue else Color.White
                                     )
                                 },
                                 label = {
