@@ -9,6 +9,11 @@ class ProductDetailViewModel: ViewModel() {
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
+    //init
+    init {
+        loadProduct(1)
+    }
+
     fun loadProduct(productId: Int) {
         val products = loadFakeProductList()
 

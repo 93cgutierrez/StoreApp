@@ -2,6 +2,7 @@ package co.edu.unab.etdm.eden.storeapp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -70,8 +71,10 @@ class MainActivity : ComponentActivity() {
                                 selected = StoreAppDestinations.HomeDestination.route == currentScreen.route,
                                 onClick = {
                                     Toast.makeText(context, "home", Toast.LENGTH_SHORT).show()
-                                    navController.navigate(StoreAppDestinations
-                                        .HomeDestination.route) {
+                                    navController.navigate(
+                                        StoreAppDestinations
+                                            .HomeDestination.route
+                                    ) {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
@@ -126,13 +129,19 @@ class MainActivity : ComponentActivity() {
                         composable(StoreAppDestinations.ProfileDestination.route) {
                             ProfileScreen()
                         }
-                        composable(StoreAppDestinations
-                            .ProductDetailDestination.route,
-                            arguments = listOf(navArgument(NavArgs.ProductId.key) { type = NavType.IntType })
-                        ) { backStackEntry ->
-                            backStackEntry.arguments?.let { it ->
+                        composable(
+                            StoreAppDestinations
+                                .ProductDetailDestination.route,
+                            arguments = listOf(navArgument(NavArgs.ProductId.key) {
+                                type = NavType.IntType
+                            })
+                        ) {
+                            //log
+                            val TAG = "HomeScreen"
+                            Log.d(TAG, "NAV INIT")
+                            it.arguments?.let { it1 ->
                                 ProductDetailScreen(
-                                    productId = it.getInt(NavArgs.ProductId.key),
+                                    productId = it1.getInt(NavArgs.ProductId.key),
                                     product = null,
                                     navController = navController,
                                     modifier = Modifier.padding(innerPadding),

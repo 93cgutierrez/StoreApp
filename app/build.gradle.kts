@@ -5,6 +5,10 @@ plugins {
     id("kotlin-parcelize")
     //serialization
     kotlin("plugin.serialization") version "2.0.0"
+    //kapt
+    id("kotlin-kapt")
+    //DI HILT
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -51,6 +55,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    // Allow references to generated code
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -89,6 +97,10 @@ dependencies {
 
     //Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //DI Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     //coroutine
     //flow
