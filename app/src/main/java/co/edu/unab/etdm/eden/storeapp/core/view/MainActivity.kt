@@ -118,7 +118,11 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 label = {
-                                    Text(text = "Home")
+                                    Text(text = "Home",
+                                        color = if (StoreAppDestinations.ProfileDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.White else Color.White)
                                 })
                             NavigationBarItem(
                                 selected = StoreAppDestinations.ProfileDestination.route == currentScreen.route,
@@ -143,7 +147,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 label = {
-                                    Text(text = "Profile")
+                                    Text(
+                                        text = "Profile",
+                                        color = if (StoreAppDestinations.ProfileDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.White else Color.White,
+                                    )
                                 })
                         }
                     }
