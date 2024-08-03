@@ -60,11 +60,11 @@ fun HomeScreen(
                             products[index].id
                         )
                 ) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                 /*   popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
                     }
                     launchSingleTop = true
-                    restoreState = false
+                    restoreState = false*/
                 }
             }
         }

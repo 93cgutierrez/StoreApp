@@ -1,3 +1,5 @@
+package co.edu.unab.etdm.eden.storeapp.signup.screen
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import co.edu.unab.etdm.eden.storeapp.R
+import co.edu.unab.etdm.eden.storeapp.signup.viewmodel.SignUpViewModel
 import coil.compose.AsyncImage
 
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController,
+                   signUpViewModel: SignUpViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderRegister()
         BodyRegister(navController)

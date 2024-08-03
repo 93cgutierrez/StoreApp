@@ -1,7 +1,7 @@
-package co.edu.unab.etdm.eden.storeapp
+package co.edu.unab.etdm.eden.storeapp.core.view
 
 import co.edu.unab.etdm.eden.storeapp.login.screen.LoginScreen
-import RegisterScreen
+import co.edu.unab.etdm.eden.storeapp.signup.screen.RegisterScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,7 +28,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.eden.storeapp.login.viewmodel.LoginViewModel
+import co.edu.unab.etdm.eden.storeapp.signup.viewmodel.SignUpViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.ui.theme.StoreAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
+    private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()
@@ -72,10 +75,10 @@ class LoginActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = StoreAppDestinations.LoginDestination.route) {
                     composable(StoreAppDestinations.LoginDestination.route) {
-                        LoginScreen(navController, LoginViewModel())
+                        LoginScreen(navController, loginViewModel)
                     }
                     composable(StoreAppDestinations.RegisterDestination.route) {
-                        RegisterScreen(navController)
+                        RegisterScreen(navController, signUpViewModel)
                     }
                 }
             }

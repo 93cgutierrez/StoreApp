@@ -16,22 +16,22 @@
         android:theme="@style/Theme.StoreApp"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".core.view.RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.StoreApp" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".core.view.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.StoreApp">
 
         </activity>
         <activity
-            android:name=".KotlinActivity"
+            android:name=".core.view.KotlinActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".core.view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.StoreApp" >

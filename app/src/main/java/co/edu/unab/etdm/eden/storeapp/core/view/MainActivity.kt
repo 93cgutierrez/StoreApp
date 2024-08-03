@@ -1,4 +1,4 @@
-package co.edu.unab.etdm.eden.storeapp
+package co.edu.unab.etdm.eden.storeapp.core.view
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -34,13 +35,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import co.edu.unab.etdm.eden.storeapp.NavArgs
+import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.eden.storeapp.home.screen.HomeScreen
 import co.edu.unab.etdm.eden.storeapp.home.viewmodel.HomeViewModel
 import co.edu.unab.etdm.eden.storeapp.product.screen.ProductDetailScreen
 import co.edu.unab.etdm.eden.storeapp.product.viewmodel.ProductDetailViewModel
+import co.edu.unab.etdm.eden.storeapp.profile.screen.ProfileScreen
+import co.edu.unab.etdm.eden.storeapp.profile.viewmodel.ProfileViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+    private val productDetailViewModel: ProductDetailViewModel by viewModels()
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,20 +70,19 @@ class MainActivity : ComponentActivity() {
                         TopAppBar(
                             title = { Text(text = currentScreen.title) },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = Color.Magenta,
+                                containerColor = Color.Blue,
                                 titleContentColor = Color.White,
                             )
                         )
                     },
                     bottomBar = {
-                        NavigationBar(containerColor = Color.Magenta, contentColor = Color.White) {
+                        NavigationBar(containerColor = Color.Blue, contentColor = Color.White) {
                             NavigationBarItem(
                                 selected = StoreAppDestinations.HomeDestination.route == currentScreen.route,
                                 onClick = {
                                     Toast.makeText(context, "home", Toast.LENGTH_SHORT).show()
                                     navController.navigate(
-                                        StoreAppDestinations
-                                            .HomeDestination.route
+                                        StoreAppDestinations.HomeDestination.route
                                     ) {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
@@ -123,15 +132,14 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 navController,
                                 Modifier.padding(innerPadding),
-                                HomeViewModel()
+                                homeViewModel
                             )
                         }
                         composable(StoreAppDestinations.ProfileDestination.route) {
-                            ProfileScreen()
+                            ProfileScreen(profileViewModel)
                         }
                         composable(
-                            StoreAppDestinations
-                                .ProductDetailDestination.route,
+                            StoreAppDestinations.ProductDetailDestination.route,
                             arguments = listOf(navArgument(NavArgs.ProductId.key) {
                                 type = NavType.IntType
                             })
@@ -145,7 +153,7 @@ class MainActivity : ComponentActivity() {
                                     product = null,
                                     navController = navController,
                                     modifier = Modifier.padding(innerPadding),
-                                    viewModel = ProductDetailViewModel(),
+                                    viewModel = productDetailViewModel,
                                 )
                             }
                         }

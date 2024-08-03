@@ -32,7 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.login.viewmodel.LoginViewModel
-import co.edu.unab.etdm.eden.storeapp.MainActivity
+import co.edu.unab.etdm.eden.storeapp.core.view.MainActivity
 import co.edu.unab.etdm.eden.storeapp.R
 import coil.compose.AsyncImage
 

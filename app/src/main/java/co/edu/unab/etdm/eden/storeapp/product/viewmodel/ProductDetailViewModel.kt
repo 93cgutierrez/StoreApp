@@ -4,14 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import co.edu.unab.etdm.eden.storeapp.product.model.Product
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProductDetailViewModel: ViewModel() {
+@HiltViewModel
+class ProductDetailViewModel @Inject constructor(): ViewModel() {
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
     //init
     init {
-        loadProduct(1)
+        //loadProduct(1)
     }
 
     fun loadProduct(productId: Int) {

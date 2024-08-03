@@ -1,11 +1,12 @@
-package co.edu.unab.etdm.eden.storeapp
+package co.edu.unab.etdm.eden.storeapp.core.view
 
 import co.edu.unab.etdm.eden.storeapp.product.model.Product
-import ProductDiscount
+import co.edu.unab.etdm.eden.storeapp.product.model.ProductDiscount
 import co.edu.unab.etdm.eden.storeapp.login.model.User
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import co.edu.unab.etdm.eden.storeapp.R
 
 class KotlinActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {

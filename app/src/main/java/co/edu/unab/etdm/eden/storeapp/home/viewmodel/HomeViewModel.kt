@@ -5,8 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import co.edu.unab.etdm.eden.storeapp.product.model.Product
+import javax.inject.Inject
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel @Inject constructor(): ViewModel() {
 
     private val _productList = MutableLiveData<List<Product>>()
     val productList: LiveData<List<Product>> = _productList
