@@ -40,17 +40,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import co.edu.unab.etdm.eden.storeapp.product.ui.screen.ProductRegisterScreen
 import co.edu.unab.etdm.eden.storeapp.NavArgs
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.eden.storeapp.home.ui.screen.HomeScreen
 import co.edu.unab.etdm.eden.storeapp.home.ui.viewmodel.HomeViewModel
 import co.edu.unab.etdm.eden.storeapp.product.ui.screen.ProductDetailScreen
-import co.edu.unab.etdm.eden.storeapp.product.ui.screen.ProductRegisterScreen
+
 import co.edu.unab.etdm.eden.storeapp.product.ui.viewmodel.ProductDetailViewModel
 import co.edu.unab.etdm.eden.storeapp.product.ui.viewmodel.ProductRegisterViewModel
 import co.edu.unab.etdm.eden.storeapp.profile.ui.screen.ProfileScreen
 import co.edu.unab.etdm.eden.storeapp.profile.ui.viewmodel.ProfileViewModel
 import co.edu.unab.etdm.eden.storeapp.ui.theme.StoreAppTheme
+import co.edu.unab.etdm.eden.storeapp.updateproduct.screen.ProductUpdateScreen
+import co.edu.unab.etdm.eden.storeapp.updateproduct.viewmodel.ProductUpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,6 +66,7 @@ class MainActivity : ComponentActivity() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private val productDetailViewModel: ProductDetailViewModel by viewModels()
     private val productRegisterViewModel: ProductRegisterViewModel by viewModels()
+    private val productUpdateViewModel: ProductUpdateViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,8 +78,8 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(baseContext, "Hi", Toast.LENGTH_SHORT).show()
             }
         }
-        homeViewModel.deleteAllProducts()
-        homeViewModel.loadFakeProductList()
+        //homeViewModel.deleteAllProducts()
+        //homeViewModel.loadFakeProductList()
         setContent {
             val context: Context = LocalContext.current
             val navController = rememberNavController()
@@ -169,21 +173,25 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {
-                                navController.navigate(StoreAppDestinations.ProductRegisterDestination.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                        //TODO: LEAVE VIEWMODEL
+                        val showAddButton: Boolean = true
+                        if(showAddButton) {
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate(StoreAppDestinations.ProductRegisterDestination.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            containerColor = Color.Blue,
-                            content = {
-                                Icon(Icons.Filled.Add, contentDescription = "Add product")
-                            },
-                        )
+                                },
+                                containerColor = Color.Blue,
+                                content = {
+                                    Icon(Icons.Filled.Add, contentDescription = "Add product")
+                                },
+                            )
+                        }
                     },
                 ) { innerPadding ->
                     NavHost(
@@ -224,6 +232,33 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     modifier = Modifier.padding(innerPadding),
                                     viewModel = productDetailViewModel,
+                                )
+                            }
+                        }
+                        composable(
+                            StoreAppDestinations.ProductUpdateDestination.route,
+                            arguments = listOf(navArgument(NavArgs.ProductId.key) {
+                                type = NavType.IntType
+                            })
+                        ) {
+                            //log
+                            Log.d(tag, "NAV INIT")
+                            it.arguments?.let { it1 ->
+                                val productId: Int = it1.getInt(NavArgs.ProductId.key)
+                                val productId2: NavArgument? =
+                                    navController.currentDestination?.arguments?.get(NavArgs.ProductId.key)
+                                if (navController.currentDestination?.route == StoreAppDestinations
+                                        .ProductDetailDestination.createRoute(productId)
+                                ) {
+                                    return@composable
+                                }
+                                Log.d(tag, "NAV1")
+                                ProductUpdateScreen(
+                                    productId = productId,
+                                    product = null,
+                                    navController = navController,
+                                    modifier = Modifier.padding(innerPadding),
+                                    viewModel = productUpdateViewModel,
                                 )
                             }
                         }

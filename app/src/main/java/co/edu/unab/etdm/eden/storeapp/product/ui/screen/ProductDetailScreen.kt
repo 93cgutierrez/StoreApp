@@ -7,12 +7,21 @@ import androidx.compose.foundation.layout.Arrangement
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,11 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.R
+import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
+import co.edu.unab.etdm.eden.storeapp.extension.navigateOnce
 import co.edu.unab.etdm.eden.storeapp.product.ui.viewmodel.ProductDetailViewModel
+import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
@@ -43,27 +59,99 @@ fun ProductDetailScreen(
     if (productItem != null && productItem.id != null) {
         Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
     } else {
-        viewModel.loadProduct(productId)
+        //viewModel.loadProduct(productId)
     }
 
-    Column {
-        //images
-        /*        ProductImages(
-                    modifier = modifier.fillMaxSize(),
-                    product = product
-                )*/
-        //price
-        //quantity
-        //add to cart button
-        //back button to product list
-        //edit button to product details(count) cart
-        //title
-        //description
-        //reviews
-        //name
-        //add to cart button
-        //back button to product list
-        //edit button to product details(count) cart
+    ConstraintLayout(
+        modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
+        val (imgProduct, tfName, tfPrice, tfDescription, btnEdit, btnCancel) = createRefs()
+        AsyncImage(
+            model = productItem.image, contentDescription = productItem.name, modifier = Modifier
+                .size(100.dp)
+                .constrainAs(imgProduct) {
+                    top.linkTo(parent.top, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+
+                }, contentScale = ContentScale.Crop
+        )
+        Text(
+            text = productItem.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfName) {
+                    top.linkTo(imgProduct.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+        )
+        Text(
+            text = "$${productItem.price}",
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfPrice) {
+                    top.linkTo(tfName.bottom, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+        )
+        Text(
+            text = productItem.description,
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfDescription) {
+                    top.linkTo(tfPrice.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+        )
+
+        Button(
+            onClick = {
+                //navigate to productDetailScreen pass productId
+                navController.navigate(
+                    StoreAppDestinations.ProductUpdateDestination.createRoute(productId)
+                ) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = false
+                }
+            },
+            modifier = Modifier.constrainAs(btnEdit) {
+                top.linkTo(tfDescription.bottom, margin = 32.dp)
+                start.linkTo(btnCancel.end, margin = 16.dp)
+                end.linkTo(parent.end, margin = 16.dp)
+                width = Dimension.fillToConstraints
+            }) {
+            Text(text = "Edit Product")
+        }
+        OutlinedButton(
+            onClick = {
+                navController.popBackStack()
+            },
+            modifier = Modifier
+                .constrainAs(btnCancel) {
+                    top.linkTo(tfDescription.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(btnEdit.start, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+                .padding(end = 8.dp)
+        ) {
+            Text(text = "Back")
+        }
+        createHorizontalChain(btnCancel, btnEdit, chainStyle = ChainStyle.Packed)
     }
 }
 //picture carousel row lazy

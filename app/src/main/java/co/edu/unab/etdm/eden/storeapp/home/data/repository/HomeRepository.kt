@@ -6,10 +6,12 @@ import co.edu.unab.etdm.eden.storeapp.core.data.local.dao.ProductDAO
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
 import co.edu.unab.etdm.eden.storeapp.product.data.toProduct
 import co.edu.unab.etdm.eden.storeapp.product.data.toProductEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val productDAO: ProductDAO) {
-    val products: LiveData<List<Product>> = productDAO.getAllProducts().map { items ->
+    val products: Flow<List<Product>> = productDAO.getAllProducts().map { items ->
         items.map {
             it.toProduct()
         }

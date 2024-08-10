@@ -8,12 +8,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import co.edu.unab.etdm.eden.storeapp.core.data.local.entity.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDAO {
 
     @Query("SELECT * FROM products")
-    fun getAllProducts(): LiveData<List<ProductEntity>>
+    fun getAllProducts(): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE id = :productId")
     fun getProductById(productId: Int): LiveData<ProductEntity>

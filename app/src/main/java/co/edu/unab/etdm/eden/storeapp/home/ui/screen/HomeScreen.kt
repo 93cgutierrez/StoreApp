@@ -18,13 +18,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
@@ -39,6 +42,9 @@ fun HomeScreen(
     navController: NavHostController,
     modifier: Modifier, viewModel: HomeViewModel
 ) {
+    val lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    
     val products: List<Product> by viewModel.productList.observeAsState(initial = emptyList())
     val context: Context = LocalContext.current
     if (products.isEmpty()) {
@@ -78,7 +84,7 @@ fun HomeScreen(
                         navController.navigateOnce(
                             it
                         ) {
-                            /*   popUpTo(navController.graph.findStartDestination().id) {
+              /*              *//*   popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
                                         launchSingleTop = true

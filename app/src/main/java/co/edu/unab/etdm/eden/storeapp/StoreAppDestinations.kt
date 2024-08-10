@@ -14,6 +14,13 @@ sealed class StoreAppDestinations(val title: String, val route: String) {
         ) {
         fun createRoute(id: Int) = "product-detail/$id"
     }
+        data object ProductUpdateDestination :
+        StoreAppDestinations(
+            "Product Update",
+            "product-update/{${NavArgs.ProductId.key}}"
+        ) {
+        fun createRoute(id: Int) = "product-update/$id"
+    }
     data object ProductRegisterDestination : StoreAppDestinations("Register Product", "product-register")
 
     companion object {
@@ -21,6 +28,7 @@ sealed class StoreAppDestinations(val title: String, val route: String) {
             HomeDestination,
             ProfileDestination,
             ProductDetailDestination,
+            ProductUpdateDestination,
             ProductRegisterDestination,
         )
     }
