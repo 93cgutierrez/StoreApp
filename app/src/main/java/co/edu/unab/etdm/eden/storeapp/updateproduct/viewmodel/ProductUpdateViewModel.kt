@@ -1,12 +1,10 @@
 package co.edu.unab.etdm.eden.storeapp.updateproduct.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.edu.unab.etdm.eden.storeapp.home.domain.DeleteProductUseCase
-import co.edu.unab.etdm.eden.storeapp.home.domain.GetProductsUseCase
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
+import co.edu.unab.etdm.eden.storeapp.product.domain.GetProductByIdUseCase
 import co.edu.unab.etdm.eden.storeapp.updateproduct.domain.ProductUpdateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,14 +13,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductUpdateViewModel @Inject constructor(
-    private val updateProductUseCase: ProductUpdateUseCase
+    private val updateProductUseCase: ProductUpdateUseCase,
+    private val getProductByIdUseCase: GetProductByIdUseCase,
 ) : ViewModel() {
-
-    private val _product = MutableLiveData<Product>()
-    val product: LiveData<Product> = _product
-
-    suspend fun updateProduct(id: Int, name: String, price: String, description: String, image: String) {
-       val updateProduct: Product = Product(
+    fun updateProduct(
+        id: Int,
+        name: String,
+        price: String,
+        description: String,
+        image: String
+    ) {
+        val updateProduct: Product = Product(
             id = id,
             name = name,
             description = description,
@@ -34,6 +35,5 @@ class ProductUpdateViewModel @Inject constructor(
         }
     }
 
-    fun getProductById(id: Int): LiveData<Product>
-    = updateProductUseCase.invoke(id)
+    fun getProductById(id: Int): LiveData<Product> = getProductByIdUseCase(id)
 }

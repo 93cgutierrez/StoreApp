@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val productDAO: ProductDAO) {
-    val products: Flow<List<Product>> = productDAO.getAllProducts().map { items ->
+    val products: LiveData<List<Product>> = productDAO.getAllProducts().map { items ->
         items.map {
             it.toProduct()
         }

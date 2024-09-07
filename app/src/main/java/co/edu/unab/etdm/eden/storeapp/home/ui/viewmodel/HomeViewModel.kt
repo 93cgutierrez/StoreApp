@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase: DeleteAllProductsUseCase,
 ) : ViewModel() {
-    val productList: Flow<List<Product>> = getProductsUseCase()
+    val productList: LiveData<List<Product>> = getProductsUseCase()
 
     fun loadFakeProductList() {
         val products = listOf(

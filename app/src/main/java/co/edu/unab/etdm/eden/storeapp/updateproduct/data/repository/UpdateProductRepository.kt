@@ -9,6 +9,4 @@ class UpdateProductRepository @Inject constructor(private val productDAO: Produc
     suspend fun updateProduct(product: Product) {
         productDAO.updateProduct(product.toProductEntity().copy(id = product.id))
     }
-
-    fun getProductById(productId: Int) = productDAO.getProductById(productId = productId)
 }

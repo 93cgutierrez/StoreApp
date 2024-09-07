@@ -9,5 +9,5 @@ import javax.inject.Inject
 class GetProductByIdUseCase @Inject constructor(
     private val productRepository: ProductDetailRepository
 ) {
-    fun getProductById(id: Int): LiveData<Product> = getProductById(id)
+    operator fun invoke(id: Int): LiveData<Product> = productRepository.getProductById(id)
 }

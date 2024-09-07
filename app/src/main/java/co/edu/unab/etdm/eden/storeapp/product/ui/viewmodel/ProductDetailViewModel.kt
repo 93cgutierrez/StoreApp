@@ -3,14 +3,20 @@ package co.edu.unab.etdm.eden.storeapp.product.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import co.edu.unab.etdm.eden.storeapp.home.domain.GetProductsUseCase
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
+import co.edu.unab.etdm.eden.storeapp.product.domain.GetProductByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailViewModel @Inject constructor(): ViewModel() {
+class ProductDetailViewModel @Inject constructor(
+    private val getProductByIdUseCase: GetProductByIdUseCase,
+) : ViewModel() {
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
+
+    fun getProductById(id: Int): LiveData<Product> = getProductByIdUseCase(id)
 
     //init
     init {
@@ -26,7 +32,7 @@ class ProductDetailViewModel @Inject constructor(): ViewModel() {
     }
 
     private fun loadFakeProductList(): List<Product> {
-        val products =  listOf(
+        val products = listOf(
             Product(
                 1,
                 "keyboard",

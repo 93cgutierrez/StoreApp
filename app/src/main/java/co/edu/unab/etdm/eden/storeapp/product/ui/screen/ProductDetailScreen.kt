@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -47,17 +48,24 @@ import coil.size.Size
 
 @Composable
 fun ProductDetailScreen(
-    productId: Int, product: Product?, navController: NavHostController,
+    productId: Int,
+    product: Product?,
+    navController: NavHostController,
     modifier: Modifier,
     viewModel: ProductDetailViewModel
 ) {
-    val productItem: Product by viewModel.product
-        .observeAsState(initial = Product(name = "", price = 0))
+    val productItem: Product by viewModel.getProductById(productId).observeAsState(
+        initial = Product(
+            name = "",
+            price = 0
+        )
+    )
 
     val context: Context = LocalContext.current
 
-    if (productItem != null && productItem.id != null) {
-        Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
+    if (productItem.id != null) {/*        LaunchedEffect(Unit) {
+                  Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
+                }*/
     } else {
         //viewModel.loadProduct(productId)
     }
@@ -72,14 +80,17 @@ fun ProductDetailScreen(
     ) {
         val (imgProduct, tfName, tfPrice, tfDescription, btnEdit, btnCancel) = createRefs()
         AsyncImage(
-            model = productItem.image, contentDescription = productItem.name, modifier = Modifier
+            model = productItem.image,
+            contentDescription = productItem.name,
+            modifier = Modifier
                 .size(100.dp)
                 .constrainAs(imgProduct) {
                     top.linkTo(parent.top, margin = 32.dp)
                     start.linkTo(parent.start, margin = 16.dp)
                     end.linkTo(parent.end, margin = 16.dp)
 
-                }, contentScale = ContentScale.Crop
+                },
+            contentScale = ContentScale.Crop
         )
         Text(
             text = productItem.name,
@@ -115,40 +126,35 @@ fun ProductDetailScreen(
                 },
         )
 
-        Button(
-            onClick = {
-                //navigate to productDetailScreen pass productId
-                navController.navigate(
-                    StoreAppDestinations.ProductUpdateDestination.createRoute(productId)
-                ) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = false
+        Button(onClick = {
+            //navigate to productDetailScreen pass productId
+            navController.navigate(
+                StoreAppDestinations.ProductUpdateDestination.createRoute(productId)
+            ) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
                 }
-            },
-            modifier = Modifier.constrainAs(btnEdit) {
-                top.linkTo(tfDescription.bottom, margin = 32.dp)
-                start.linkTo(btnCancel.end, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                width = Dimension.fillToConstraints
-            }) {
+                launchSingleTop = true
+                restoreState = false
+            }
+        }, modifier = Modifier.constrainAs(btnEdit) {
+            top.linkTo(tfDescription.bottom, margin = 32.dp)
+            start.linkTo(btnCancel.end, margin = 16.dp)
+            end.linkTo(parent.end, margin = 16.dp)
+            width = Dimension.fillToConstraints
+        }) {
             Text(text = "Edit Product")
         }
-        OutlinedButton(
-            onClick = {
-                navController.popBackStack()
-            },
-            modifier = Modifier
-                .constrainAs(btnCancel) {
-                    top.linkTo(tfDescription.bottom, margin = 32.dp)
-                    start.linkTo(parent.start, margin = 16.dp)
-                    end.linkTo(btnEdit.start, margin = 16.dp)
-                    width = Dimension.fillToConstraints
-                }
-                .padding(end = 8.dp)
-        ) {
+        OutlinedButton(onClick = {
+            navController.popBackStack()
+        }, modifier = Modifier
+            .constrainAs(btnCancel) {
+                top.linkTo(tfDescription.bottom, margin = 32.dp)
+                start.linkTo(parent.start, margin = 16.dp)
+                end.linkTo(btnEdit.start, margin = 16.dp)
+                width = Dimension.fillToConstraints
+            }
+            .padding(end = 8.dp)) {
             Text(text = "Back")
         }
         createHorizontalChain(btnCancel, btnEdit, chainStyle = ChainStyle.Packed)
@@ -187,18 +193,14 @@ fun ImageItem(urlImage: String) {
         onClick = {
             Toast.makeText(context, urlImage, Toast.LENGTH_SHORT).show()
         },
-        modifier = Modifier
-            .size(200.dp),
+        modifier = Modifier.size(200.dp),
 
         ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (imgProduct) = createRefs()
-            SubcomposeAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(urlImage)
-                    .size(Size.ORIGINAL) // Set the target size to load the image at.
-                    .error(R.drawable.ic_error)
-                    .build(),
+            SubcomposeAsyncImage(model = ImageRequest.Builder(LocalContext.current).data(urlImage)
+                .size(Size.ORIGINAL) // Set the target size to load the image at.
+                .error(R.drawable.ic_error).build(),
                 loading = {
                     CircularProgressIndicator()
                 },

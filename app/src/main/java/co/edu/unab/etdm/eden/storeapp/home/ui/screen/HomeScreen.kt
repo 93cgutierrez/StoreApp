@@ -44,7 +44,7 @@ fun HomeScreen(
 ) {
     val lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    
+
     val products: List<Product> by viewModel.productList.observeAsState(initial = emptyList())
     val context: Context = LocalContext.current
     if (products.isEmpty()) {
@@ -84,7 +84,7 @@ fun HomeScreen(
                         navController.navigateOnce(
                             it
                         ) {
-              /*              *//*   popUpTo(navController.graph.findStartDestination().id) {
+                            /*              *//*   popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
                                         launchSingleTop = true

@@ -1,5 +1,8 @@
 package co.edu.unab.etdm.eden.storeapp.updateproduct.screen
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -19,9 +23,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
@@ -29,7 +35,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
-import co.edu.unab.etdm.eden.storeapp.product.ui.viewmodel.ProductRegisterViewModel
 import co.edu.unab.etdm.eden.storeapp.updateproduct.viewmodel.ProductUpdateViewModel
 import coil.compose.AsyncImage
 
@@ -39,9 +44,14 @@ fun ProductUpdateScreen(
     modifier: Modifier,
     navController: NavController,
     viewModel: ProductUpdateViewModel,
-    ) {
-
-    val product: Product by viewModel.product.observeAsState(initial = Product(name = "", price = 0))
+) {
+    val context: Context = LocalContext.current
+    val productItem: Product by viewModel.getProductById(productId).observeAsState(
+        initial = Product(
+            name = "",
+            price = 0
+        )
+    )
 
     var name: String by rememberSaveable {
 
@@ -61,12 +71,12 @@ fun ProductUpdateScreen(
         mutableStateOf("https://cdn-icons-png.freepik.com/256/12313/12313717.png?semt=ais_hybrid")
     }
 
-    if(product.id != null) {
+    if (productItem.id != null) {
         LaunchedEffect(Unit) {
-            name = product.name
-            price = product.price.toString()
-            description = product.description
-            image = product.image
+            name = productItem.name
+            price = productItem.price.toString()
+            description = productItem.description
+            image = productItem.image
         }
 
         ConstraintLayout(
@@ -122,7 +132,8 @@ fun ProductUpdateScreen(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent
                 ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
             )
             TextField(
                 value = description,
@@ -161,7 +172,14 @@ fun ProductUpdateScreen(
             )
             Button(
                 onClick = {
-                    //viewModel.addProduct(name, price, description, image)
+                    viewModel.updateProduct(
+                        id = productId,
+                        name = name,
+                        price = price,
+                        description = description,
+                        image = image,
+                    )
+                    Toast.makeText(context, "product updated", Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
                 },
                 modifier = Modifier.constrainAs(btnAdd) {
@@ -170,7 +188,7 @@ fun ProductUpdateScreen(
                     end.linkTo(parent.end, margin = 16.dp)
                     width = Dimension.fillToConstraints
                 }) {
-                Text(text = "Crear producto")
+                Text(text = "Edit product")
             }
             OutlinedButton(
                 onClick = {
@@ -185,9 +203,13 @@ fun ProductUpdateScreen(
                     }
                     .padding(end = 8.dp)
             ) {
-                Text(text = "Regresar")
+                Text(text = "Back")
             }
             createHorizontalChain(btnCancel, btnAdd, chainStyle = ChainStyle.Packed)
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     }
 

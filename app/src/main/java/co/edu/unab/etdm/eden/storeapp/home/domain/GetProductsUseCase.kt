@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetProductsUseCase @Inject constructor(private val homeRepository: HomeRepository) {
-    operator fun invoke(): Flow<List<Product>> {
+    operator fun invoke(): LiveData<List<Product>> {
         return homeRepository.products
     }
 }

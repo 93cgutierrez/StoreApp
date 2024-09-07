@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProductDAO {
 
     @Query("SELECT * FROM products")
-    fun getAllProducts(): Flow<List<ProductEntity>>
+    fun getAllProducts(): LiveData<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE id = :productId")
     fun getProductById(productId: Int): LiveData<ProductEntity>
