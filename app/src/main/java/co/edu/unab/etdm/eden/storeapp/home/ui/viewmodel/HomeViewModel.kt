@@ -7,10 +7,17 @@ import co.edu.unab.etdm.eden.storeapp.home.domain.DeleteAllProductsUseCase
 import co.edu.unab.etdm.eden.storeapp.home.domain.DeleteProductUseCase
 import co.edu.unab.etdm.eden.storeapp.home.domain.GetProductsUseCase
 import co.edu.unab.etdm.eden.storeapp.home.domain.SaveProductsUseCase
+import co.edu.unab.etdm.eden.storeapp.home.ui.ProductsUIState
+import co.edu.unab.etdm.eden.storeapp.home.ui.ProductsUIState.Success
 import co.edu.unab.etdm.eden.storeapp.product.data.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +28,14 @@ class HomeViewModel @Inject constructor(
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase: DeleteAllProductsUseCase,
 ) : ViewModel() {
-    val productList: LiveData<List<Product>> = getProductsUseCase()
+
+    val productList: Flow<List<Product>> = getProductsUseCase()
+
+    val uiState: StateFlow<ProductsUIState> = getProductsUseCase().map(::Success)
+        .catch { throwable ->
+            ProductsUIState.Error(throwable)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),
+            ProductsUIState.Loading)
 
     fun loadFakeProductList() {
         val products = listOf(

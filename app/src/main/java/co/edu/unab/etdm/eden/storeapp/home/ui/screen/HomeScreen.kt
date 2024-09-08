@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -28,14 +30,17 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.eden.storeapp.R
 import co.edu.unab.etdm.eden.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.eden.storeapp.extension.navigateOnce
+import co.edu.unab.etdm.eden.storeapp.home.ui.ProductsUIState
 import co.edu.unab.etdm.eden.storeapp.home.ui.viewmodel.HomeViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun HomeScreen(
@@ -43,56 +48,78 @@ fun HomeScreen(
     modifier: Modifier, viewModel: HomeViewModel
 ) {
     val lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle
-
-
-    val products: List<Product> by viewModel.productList.observeAsState(initial = emptyList())
     val context: Context = LocalContext.current
-    if (products.isEmpty()) {
-        //viewModel.loadFakeProductList()
-        return
-    }
-    LazyColumn(
-        modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    //handler UI states
+    val uiState by produceState<ProductsUIState>(
+        initialValue = ProductsUIState.Loading,
+        key1 = lifecycle, key2 = viewModel
     ) {
-        items(products.size) { index ->
-            ProductItem(
-                product = products[index],
-                onLongPressItem = { productValue ->
-                    Toast.makeText(
-                        context,
-                        "long press $index Item: ${productValue}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    viewModel.deleteProduct(productValue)
-                },
-                onSelected = { productValue ->
-                    Toast.makeText(
-                        context,
-                        "on press $index Item: ${productValue}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //navigate to productDetailScreen pass productId
-                    products[index].id?.let {
-                        StoreAppDestinations
-                            .ProductDetailDestination.createRoute(
-                                it
-                            )
-                    }?.let {
-                        navController.navigateOnce(
-                            it
-                        ) {
-                            /*              *//*   popUpTo(navController.graph.findStartDestination().id) {
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            viewModel.uiState.collect { state -> value = state }
+        }
+    }
+
+    when (uiState) {
+        ProductsUIState.Empty -> {
+            Text(text = "Data not found", modifier = Modifier.fillMaxWidth())
+        }
+        is ProductsUIState.Error -> {
+            val errorMessage = (uiState as ProductsUIState.Error).throwable
+            Toast.makeText(context, "Error: ${errorMessage.message}", Toast.LENGTH_SHORT).show()
+        }
+        ProductsUIState.Idle -> {
+        }
+        ProductsUIState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            }
+        }
+        is ProductsUIState.Success -> {
+            val products = (uiState as ProductsUIState.Success).products
+            LazyColumn(
+                modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(products.size) { index ->
+                    ProductItem(
+                        product = products[index],
+                        onLongPressItem = { productValue ->
+                            Toast.makeText(
+                                context,
+                                "long press $index Item: ${productValue}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.deleteProduct(productValue)
+                        },
+                        onSelected = { productValue ->
+                            Toast.makeText(
+                                context,
+                                "on press $index Item: ${productValue}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //navigate to productDetailScreen pass productId
+                            products[index].id?.let {
+                                StoreAppDestinations
+                                    .ProductDetailDestination.createRoute(
+                                        it
+                                    )
+                            }?.let {
+                                navController.navigateOnce(
+                                    it
+                                ) {
+                                    /*              *//*   popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
                                         launchSingleTop = true
                                         restoreState = false*/
-                        }
-                    }
-                },
-            )
+                                }
+                            }
+                        },
+                    )
+                }
+            }
         }
     }
 }
