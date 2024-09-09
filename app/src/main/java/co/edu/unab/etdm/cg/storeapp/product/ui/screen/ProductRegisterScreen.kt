@@ -129,7 +129,7 @@ fun ProductRegisterScreen(
         TextField(
             value = image,
             onValueChange = { productImageUrl -> image = productImageUrl },
-            label = { Text(text = "URL Imágen:") },
+            label = { Text(text = "URL Imagen:") },
             placeholder = { Text(text = "URL del producto") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,7 +155,7 @@ fun ProductRegisterScreen(
                 end.linkTo(parent.end, margin = 16.dp)
                 width = Dimension.fillToConstraints
             }) {
-            Text(text = "Crear producto")
+            Text(text = "Create product")
         }
         OutlinedButton(
             onClick = {

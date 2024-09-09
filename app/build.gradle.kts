@@ -9,6 +9,8 @@ plugins {
     id("kotlin-kapt")
     //DI HILT
     id("com.google.dagger.hilt.android")
+    //GMS
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -115,7 +117,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //Firebase authentication
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
     implementation("com.google.firebase:firebase-auth")
 
     //divider M3

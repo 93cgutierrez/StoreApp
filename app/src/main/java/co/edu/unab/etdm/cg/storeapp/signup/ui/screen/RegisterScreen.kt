@@ -3,8 +3,13 @@ package co.edu.unab.etdm.cg.storeapp.signup.ui.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -15,9 +20,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import co.edu.unab.etdm.cg.storeapp.R
 import co.edu.unab.etdm.cg.storeapp.signup.ui.viewmodel.SignUpViewModel
@@ -26,7 +36,7 @@ import coil.compose.AsyncImage
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    signUpViewModel: SignUpViewModel
+    viewModel: SignUpViewModel
 ) {
     var name: String by rememberSaveable {
         mutableStateOf("")
@@ -41,96 +51,134 @@ fun RegisterScreen(
         mutableStateOf("")
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        HeaderRegister()
-        BodyRegister(navController)
-    }
-}
-
-@Composable
-fun HeaderRegister() {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val (imgLogin, txtLogin) = createRefs()
+    ConstraintLayout(
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
+        val (img, tfName, tfDocument, tfEmail, tfPassword, btnAdd, btnCancel) = createRefs()
         AsyncImage(
             model = "https://cengage.my.site.com/resource/1607465003000/loginIcon",
             contentDescription = "Logo",
             Modifier
-                .constrainAs(imgLogin) {
-                    top.linkTo(parent.top, margin = 32.dp)
+                .constrainAs(img) {
+                    top.linkTo(parent.top, margin = 120.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
                 .size(100.dp)
         )
-        Text(
-            text = stringResource(R.string.txt_register_tittle),
-            modifier = Modifier.constrainAs(txtLogin) {
-                top.linkTo(imgLogin.bottom, margin = 32.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            })
-    }
-}
-
-@Composable
-fun BodyRegister(navController: NavController) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (tfName, tfEmail, tfPass, btnLogin) = createRefs()
-        TextField(value = "",
-            onValueChange = {},
+        TextField(
+            value = name,
+            onValueChange = { productName -> name = productName },
+            label = { Text(text = "Name:") },
+            placeholder = { Text(text = "Username") },
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(tfName) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-            placeholder = { Text(text = stringResource(R.string.txt_placeholder_email_login)) })
-        TextField(value = "",
-            onValueChange = {},
+                    top.linkTo(img.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent
+            ),
+            singleLine = true
+        )
+        TextField(
+            value = document,
+            onValueChange = { userDocument -> document = userDocument },
+            label = { Text(text = "Document:") },
+            placeholder = { Text(text = "1") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfDocument) {
+                    top.linkTo(tfName.bottom, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true
+        )
+        TextField(
+            value = email,
+            onValueChange = { userEmail -> email = userEmail },
+            label = { Text(text = "Email:") },
+            placeholder = { Text(text = "User Email") },
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(tfEmail) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-            placeholder = { Text(text = stringResource(R.string.txt_placeholder_email_login)) })
-
-        /*        TextField(value = "",
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(tfPass) {
-                            top.linkTo(tfEmail.bottom, margin = 20.dp)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(R.string.txt_placeholder_password_login)) })*/
-
-        /*        TextField(value = "",
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(tfPass) {
-                            top.linkTo(tfEmail.bottom, margin = 20.dp)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }, colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(R.string.txt_register_confirm_password)) })*/
-
-        Button(onClick = {
-            navController.popBackStack()
-        }, modifier = Modifier.constrainAs(btnLogin) {
-            top.linkTo(tfPass.bottom, margin = 20.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            Text(text = stringResource(R.string.txt_btn_register))
+                    top.linkTo(tfDocument.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), singleLine = true
+        )
+        TextField(
+            value = password,
+            onValueChange = { userPassword -> password = userPassword },
+            label = { Text(text = "Password:") },
+            placeholder = { Text(text = "User password") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(tfPassword) {
+                    top.linkTo(tfEmail.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent
+            ),
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Button(
+            onClick = {
+                viewModel.createAccount(
+                    name = name,
+                    document = document,
+                    email = email,
+                    password = password,
+                )
+                navController.popBackStack()
+            },
+            modifier = Modifier.constrainAs(btnAdd) {
+                top.linkTo(tfPassword.bottom, margin = 32.dp)
+                start.linkTo(btnCancel.end, margin = 16.dp)
+                end.linkTo(parent.end, margin = 16.dp)
+                width = Dimension.fillToConstraints
+            }) {
+            Text(text = stringResource(R.string.register_screen_register_button_value))
         }
-
+        OutlinedButton(
+            onClick = {
+                navController.popBackStack()
+            },
+            modifier = Modifier
+                .constrainAs(btnCancel) {
+                    top.linkTo(tfPassword.bottom, margin = 32.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(btnAdd.start, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+                .padding(end = 8.dp)
+        ) {
+            Text(text = stringResource(R.string.register_screen_back_button_value))
+        }
+        createHorizontalChain(btnCancel, btnAdd, chainStyle = ChainStyle.Packed)
     }
-
 }
 
 
