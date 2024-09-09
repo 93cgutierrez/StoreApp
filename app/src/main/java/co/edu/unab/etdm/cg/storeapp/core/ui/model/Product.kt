@@ -1,4 +1,4 @@
-package co.edu.unab.etdm.cg.storeapp.product.data
+package co.edu.unab.etdm.cg.storeapp.core.ui.model
 
 import co.edu.unab.etdm.cg.storeapp.core.data.local.entity.ProductEntity
 

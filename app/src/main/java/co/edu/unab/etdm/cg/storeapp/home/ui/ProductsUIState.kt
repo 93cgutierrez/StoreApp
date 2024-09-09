@@ -1,6 +1,6 @@
 package co.edu.unab.etdm.cg.storeapp.home.ui
 
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 
 sealed interface ProductsUIState {
     //extras

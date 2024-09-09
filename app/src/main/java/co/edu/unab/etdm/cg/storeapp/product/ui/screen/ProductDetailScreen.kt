@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

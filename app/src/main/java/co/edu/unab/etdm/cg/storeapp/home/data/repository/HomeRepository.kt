@@ -1,9 +1,9 @@
 package co.edu.unab.etdm.cg.storeapp.home.data.repository
 
 import co.edu.unab.etdm.cg.storeapp.core.data.local.dao.ProductDAO
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
-import co.edu.unab.etdm.cg.storeapp.product.data.toProduct
-import co.edu.unab.etdm.cg.storeapp.product.data.toProductEntity
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProduct
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProductEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -34,7 +34,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import co.edu.unab.etdm.cg.storeapp.updateproduct.viewmodel.ProductUpdateViewModel
 import coil.compose.AsyncImage
 

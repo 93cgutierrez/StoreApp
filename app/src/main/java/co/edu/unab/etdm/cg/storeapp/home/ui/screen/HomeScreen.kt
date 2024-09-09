@@ -1,6 +1,6 @@
 package co.edu.unab.etdm.cg.storeapp.home.ui.screen
 
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border

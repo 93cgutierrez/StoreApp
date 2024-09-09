@@ -1,6 +1,6 @@
 package co.edu.unab.etdm.cg.storeapp.login.ui.viewmodel
 
-import co.edu.unab.etdm.cg.storeapp.login.data.User
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.User
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,19 +45,22 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
     fun login(): String {
-        return when (_email.value == getUser().email && _password.value == getUser().password) {
-            true -> "Iniciando sesión...."
-            false -> "Usuario o contraseña invalido porfavor intente de nuevo"
-        }
+        /*        return when (_email.value == getUser().email && _password.value == getUser().password) {
+                    true -> "Iniciando sesión...."
+                    false -> "Usuario o contraseña invalido porfavor intente de nuevo"
+                }*/
+        return "Iniciando sesión...."
     }
 
     private fun getUser(): User {
-        return User(email = "1", password = "1")
+        return User(document = 1234, name = "", email = "1")
     }
 
     fun verifyLogin(): Boolean {
-        _isLogin.value = (_email.value == getUser().email
-                && _password.value == getUser().password)
-        return _isLogin.value == true
+        // TODO: refactor
+        /*        _isLogin.value = (_email.value == getUser().email
+                        && _password.value == getUser().password)
+                return _isLogin.value == true*/
+        return true
     }
 }

@@ -1,8 +1,8 @@
 package co.edu.unab.etdm.cg.storeapp.core.ui.activity
 
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
-import co.edu.unab.etdm.cg.storeapp.product.data.ProductDiscount
-import co.edu.unab.etdm.cg.storeapp.login.data.User
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.ProductDiscount
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.User
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -34,15 +34,16 @@ class KotlinActivity : Activity() {
     }
 
     private fun login(email: String, password: String): String {
-        return when (email == getUser().email && password == getUser().password) {
-            true -> "Iniciando sesión...."
-            false -> "Usuario o contraseña invalido porfavor intente de nuevo"
-        }
-
+        // TODO: refactor
+        /*        return when (email == getUser().email && password == getUser().password) {
+                    true -> "Iniciando sesión...."
+                    false -> "Usuario o contraseña invalido porfavor intente de nuevo"
+                }*/
+        return "Iniciando sesión...."
     }
 
     private fun getUser(): User {
-        return User(email = "pepito@gamil.com", password = "123547")
+        return User(document = 12345, name = "Pepito", email = "pepito@gamil.com")
     }
 }
 

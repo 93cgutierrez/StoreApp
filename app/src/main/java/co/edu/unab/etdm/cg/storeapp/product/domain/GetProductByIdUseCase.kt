@@ -1,7 +1,7 @@
 package co.edu.unab.etdm.cg.storeapp.product.domain
 
 import androidx.lifecycle.LiveData
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import co.edu.unab.etdm.cg.storeapp.product.data.repository.ProductDetailRepository
 import javax.inject.Inject
 

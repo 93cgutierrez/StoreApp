@@ -113,4 +113,12 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
+
+    //Firebase authentication
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-auth")
+
+    //divider M3
+    implementation("androidx.compose.material:material:1.3.0")
+
 }

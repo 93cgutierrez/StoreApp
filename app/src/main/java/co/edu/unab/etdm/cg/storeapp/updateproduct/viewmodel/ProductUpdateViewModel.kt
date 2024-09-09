@@ -3,7 +3,7 @@ package co.edu.unab.etdm.cg.storeapp.updateproduct.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import co.edu.unab.etdm.cg.storeapp.product.domain.GetProductByIdUseCase
 import co.edu.unab.etdm.cg.storeapp.updateproduct.domain.ProductUpdateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

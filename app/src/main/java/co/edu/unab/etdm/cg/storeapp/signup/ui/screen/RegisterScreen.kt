@@ -9,6 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -20,15 +24,53 @@ import co.edu.unab.etdm.cg.storeapp.signup.ui.viewmodel.SignUpViewModel
 import coil.compose.AsyncImage
 
 @Composable
-fun RegisterScreen(navController: NavController,
-                   signUpViewModel: SignUpViewModel
+fun RegisterScreen(
+    navController: NavController,
+    signUpViewModel: SignUpViewModel
 ) {
+    var name: String by rememberSaveable {
+        mutableStateOf("")
+    }
+    var document: String by rememberSaveable {
+        mutableStateOf("")
+    }
+    var email: String by rememberSaveable {
+        mutableStateOf("")
+    }
+    var password: String by rememberSaveable {
+        mutableStateOf("")
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderRegister()
         BodyRegister(navController)
     }
 }
 
+@Composable
+fun HeaderRegister() {
+    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+        val (imgLogin, txtLogin) = createRefs()
+        AsyncImage(
+            model = "https://cengage.my.site.com/resource/1607465003000/loginIcon",
+            contentDescription = "Logo",
+            Modifier
+                .constrainAs(imgLogin) {
+                    top.linkTo(parent.top, margin = 32.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .size(100.dp)
+        )
+        Text(
+            text = stringResource(R.string.txt_register_tittle),
+            modifier = Modifier.constrainAs(txtLogin) {
+                top.linkTo(imgLogin.bottom, margin = 32.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            })
+    }
+}
 
 @Composable
 fun BodyRegister(navController: NavController) {
@@ -91,27 +133,4 @@ fun BodyRegister(navController: NavController) {
 
 }
 
-@Composable
-fun HeaderRegister() {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val (imgLogin, txtLogin) = createRefs()
-        AsyncImage(
-            model = "https://cengage.my.site.com/resource/1607465003000/loginIcon",
-            contentDescription = "Logo",
-            Modifier
-                .constrainAs(imgLogin) {
-                    top.linkTo(parent.top, margin = 32.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .size(100.dp)
-        )
-        Text(
-            text = stringResource(R.string.txt_register_tittle),
-            modifier = Modifier.constrainAs(txtLogin) {
-                top.linkTo(imgLogin.bottom, margin = 32.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            })
-    }
-}
+

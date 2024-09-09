@@ -8,7 +8,7 @@ import co.edu.unab.etdm.cg.storeapp.home.domain.GetProductsUseCase
 import co.edu.unab.etdm.cg.storeapp.home.domain.SaveProductsUseCase
 import co.edu.unab.etdm.cg.storeapp.home.ui.ProductsUIState
 import co.edu.unab.etdm.cg.storeapp.home.ui.ProductsUIState.Success
-import co.edu.unab.etdm.cg.storeapp.product.data.Product
+import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
