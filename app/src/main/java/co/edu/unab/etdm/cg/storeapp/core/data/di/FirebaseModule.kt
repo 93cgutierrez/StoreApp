@@ -3,6 +3,9 @@ package co.edu.unab.etdm.cg.storeapp.core.data.di
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +25,14 @@ class FirebaseModule {
 
     @Provides
     fun provideFirebaseAuth(firebaseApp: FirebaseApp?): FirebaseAuth {
-        firebaseApp?.name
+        firebaseApp?.name ?: throw IllegalStateException("FirebaseApp is null")
         return FirebaseAuth.getInstance()
+    }
+
+    //firestore
+    @Provides
+    fun provideFirestore(firebaseApp: FirebaseApp?): FirebaseFirestore {
+        firebaseApp?.name ?: throw IllegalStateException("FirebaseApp is null")
+        return Firebase.firestore
     }
 }

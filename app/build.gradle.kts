@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -117,8 +119,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //Firebase authentication
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
-    implementation("com.google.firebase:firebase-auth")
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.auth)
 
     //divider M3
     implementation("androidx.compose.material:material:1.3.0")
