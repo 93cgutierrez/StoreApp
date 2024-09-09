@@ -4,28 +4,30 @@ import co.edu.unab.etdm.cg.storeapp.core.ui.model.User
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import co.edu.unab.etdm.cg.storeapp.login.domain.LoginUseCase
+import co.edu.unab.etdm.cg.storeapp.login.ui.LoginUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : ViewModel() {
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
 
-    private val _isLogin = MutableLiveData<Boolean>()
-    val isLogin: LiveData<Boolean> = _isLogin
-
-    private val _isError = MutableLiveData<Boolean>()
-    val isError: LiveData<Boolean> = _isError
+    private val _uiState = MutableStateFlow<LoginUIState>(LoginUIState.Default)
+    val uiState: StateFlow<LoginUIState> = _uiState
 
     init {
         _email.value = ""
         _password.value = ""
-        _isLogin.value = false
-        _isError.value = false
     }
 
     fun onEmailChanged(email: String) {
@@ -36,31 +38,19 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         _password.value = password
     }
 
-    fun onIsLoginChange(isLogin: Boolean) {
-        _isLogin.value = isLogin
+    fun onResetState() {
+        _uiState.value = LoginUIState.Default
     }
 
-    fun onIsErrorChange(isError: Boolean) {
-        _isError.value = isError
+    fun verifyLogin() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.emit(
+                loginUseCase(
+                    email = email.value!!,
+                    password = password.value!!,
+                )
+            )
+        }
     }
 
-    fun login(): String {
-        /*        return when (_email.value == getUser().email && _password.value == getUser().password) {
-                    true -> "Iniciando sesión...."
-                    false -> "Usuario o contraseña invalido porfavor intente de nuevo"
-                }*/
-        return "Iniciando sesión...."
-    }
-
-    private fun getUser(): User {
-        return User(document = 1234, name = "", email = "1")
-    }
-
-    fun verifyLogin(): Boolean {
-        // TODO: refactor
-        /*        _isLogin.value = (_email.value == getUser().email
-                        && _password.value == getUser().password)
-                return _isLogin.value == true*/
-        return true
-    }
 }

@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -27,33 +30,83 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import co.edu.unab.etdm.cg.storeapp.R
 import co.edu.unab.etdm.cg.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.cg.storeapp.core.ui.activity.MainActivity
+import co.edu.unab.etdm.cg.storeapp.login.ui.LoginUIState
 import co.edu.unab.etdm.cg.storeapp.login.ui.viewmodel.LoginViewModel
 import coil.compose.AsyncImage
 
 //@Preview(showBackground = true)
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
-    //LoginViewModel
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val context: Context = LocalContext.current
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val uiState by produceState<LoginUIState>(
+        initialValue = LoginUIState.Default,
+        key1 = lifecycle,
+        key2 = viewModel
+    ) {
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            viewModel.uiState.collect { isLogged -> value = isLogged }
+        }
+    }
+
+    when (uiState) {
+        LoginUIState.Default -> {
+            println("default state")
+        }
+
+        LoginUIState.Error -> {
+            Toast.makeText(context, "Login Failure", Toast.LENGTH_SHORT).show()
+            viewModel.onResetState()
+        }
+
+        LoginUIState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            }
+        }
+
+        LoginUIState.Success -> {
+            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            (context as Activity).finish()
+            viewModel.onResetState()
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderScreen()
-        BodyLogin(navController = navController, viewModel = viewModel)
+        BodyLogin(
+            navController = navController,
+            viewModel = viewModel,
+            keyboardController = keyboardController
+        )
         Spacer(modifier = Modifier.weight(1f))
         FooterLogin(navController = navController)
     }
@@ -93,25 +146,15 @@ fun HeaderScreen() {
 }
 
 @Composable
-fun BodyLogin(navController: NavController, viewModel: LoginViewModel) {
+fun BodyLogin(
+    navController: NavController,
+    viewModel: LoginViewModel,
+    keyboardController: SoftwareKeyboardController?
+) {
     //observeasstate
     val emailValue: String by viewModel.email.observeAsState(initial = "")
     val passwordValue: String by viewModel.password.observeAsState(initial = "")
-    val isLogin: Boolean by viewModel.isLogin.observeAsState(initial = false)
-    val isError: Boolean by viewModel.isError.observeAsState(initial = false)
 
-    val context: Context = LocalContext.current
-
-    if (isLogin) {
-        Toast.makeText(context, "Iniciando sesion...", Toast.LENGTH_SHORT).show()
-        viewModel.onIsLoginChange(false)
-        val intent = Intent(context, MainActivity::class.java)
-        context.startActivity(intent)
-        (context as Activity).finish()
-    } else if (isError) {
-        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-        viewModel.onIsErrorChange(false)
-    }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,6 +182,9 @@ fun BodyLogin(navController: NavController, viewModel: LoginViewModel) {
         TextField(
             value = passwordValue,
             onValueChange = { viewModel.onPasswordChanged(it) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Lock, contentDescription = "lock password",
@@ -160,11 +206,8 @@ fun BodyLogin(navController: NavController, viewModel: LoginViewModel) {
         )
 
         Button(onClick = {
-            //navigate to registerScreen
-            //navController.navigate(StoreAppDestinations.RegisterDestination.route)
+            keyboardController?.hide()
             viewModel.verifyLogin()
-            viewModel.isLogin.value?.let { viewModel.onIsErrorChange(!it) }
-                ?: viewModel.onIsErrorChange(true)
         }, modifier = Modifier.constrainAs(btnLogin) {
             top.linkTo(tfPass.bottom, margin = 32.dp)
             start.linkTo(parent.start)
