@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "co.edu.unab.etdm.eden.storeapp"
+    namespace = "co.edu.unab.etdm.cg.storeapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "co.edu.unab.etdm.eden.storeapp"
+        applicationId = "co.edu.unab.etdm.cg.storeapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
