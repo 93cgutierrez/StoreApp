@@ -6,12 +6,17 @@ import co.edu.unab.etdm.cg.storeapp.core.ui.model.User
 import co.edu.unab.etdm.cg.storeapp.signup.domain.CreateAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(private val createAccountUseCase: CreateAccountUseCase) :
     ViewModel() {
+    private val _onCreateAccount = MutableStateFlow<Boolean>(false)
+    val onCreateAccount: StateFlow<Boolean> = _onCreateAccount
+
     fun createAccount(name: String, document: String, email: String, password: String) {
         val user = User(
             name = name,
@@ -19,7 +24,7 @@ class SignUpViewModel @Inject constructor(private val createAccountUseCase: Crea
             email = email,
         )
         viewModelScope.launch(Dispatchers.IO) {
-            createAccountUseCase(user, password)
+            _onCreateAccount.emit(createAccountUseCase(user, password))
         }
     }
 
