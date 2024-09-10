@@ -69,7 +69,7 @@ class ProductFirestoreDatasource @Inject constructor(private val firebaseClient:
     }
 
     fun delete(product: Product) {
-        //TODO: CG 20240910
+        //TODO: CG 20240910 CHECK DELETE INDEX ON PRODUCT
         val productEntity = product.toProductEntity()
         firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
             .document(productEntity.id.toString())
