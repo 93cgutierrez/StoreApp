@@ -125,4 +125,10 @@ dependencies {
     //divider M3
     implementation("androidx.compose.material:material:1.3.0")
 
+    //retrofit
+    // Retrofit
+    implementation(libs.retrofit)
+    // Retrofit with Gson Converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
 }

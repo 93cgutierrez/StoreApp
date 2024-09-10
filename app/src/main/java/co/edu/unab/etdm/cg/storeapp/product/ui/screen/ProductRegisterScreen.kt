@@ -170,7 +170,7 @@ fun ProductRegisterScreen(
                 }
                 .padding(end = 8.dp)
         ) {
-            Text(text = "Regresar")
+            Text(text = "Back")
         }
         createHorizontalChain(btnCancel, btnAdd, chainStyle = ChainStyle.Packed)
     }

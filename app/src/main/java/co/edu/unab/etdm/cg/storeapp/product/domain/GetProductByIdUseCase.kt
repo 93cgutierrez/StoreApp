@@ -8,5 +8,7 @@ import javax.inject.Inject
 class GetProductByIdUseCase @Inject constructor(
     private val productRepository: ProductDetailRepository
 ) {
-    operator fun invoke(id: Int): LiveData<Product> = productRepository.getProductById(id)
+    operator fun invoke(id: Int): LiveData<Product> =
+
+        productRepository.getProductByIdFirestore(id)
 }

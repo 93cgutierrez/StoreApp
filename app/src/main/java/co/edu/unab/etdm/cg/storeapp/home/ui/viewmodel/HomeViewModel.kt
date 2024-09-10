@@ -39,9 +39,9 @@ class HomeViewModel @Inject constructor(
         )
 
     fun deleteProduct(product: Product) {
-        viewModelScope.launch(Dispatchers.IO) {
-            deleteProductUseCase(product)
-        }
+        //viewModelScope.launch(Dispatchers.IO) {
+        deleteProductUseCase(product)
+        // }
     }
 
     fun deleteAllProducts() {

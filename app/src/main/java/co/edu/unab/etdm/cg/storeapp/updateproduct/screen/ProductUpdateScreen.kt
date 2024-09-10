@@ -49,7 +49,7 @@ fun ProductUpdateScreen(
     val productItem: Product by viewModel.getProductById(productId).observeAsState(
         initial = Product(
             id = 0,
-            name = "",
+            name = "hola",
             price = 0
         )
     )
@@ -72,7 +72,7 @@ fun ProductUpdateScreen(
         mutableStateOf("https://cdn-icons-png.freepik.com/256/12313/12313717.png?semt=ais_hybrid")
     }
 
-    if (productItem.id != null) {
+    if (productItem.id != 0) {
         LaunchedEffect(Unit) {
             name = productItem.name
             price = productItem.price.toString()

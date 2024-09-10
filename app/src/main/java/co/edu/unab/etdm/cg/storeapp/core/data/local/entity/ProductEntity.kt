@@ -10,6 +10,9 @@ data class ProductEntity(
     @ColumnInfo(name = "id") val id: Int = System.currentTimeMillis().hashCode(),
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "price") val price: Int,
-    @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "image") val image: String,
-)
+    @ColumnInfo(name = "description") val description: String = "without Description",
+    @ColumnInfo(name = "image") val image: String = "https://www.libreriahuequito.com/public/images/productos/default.png",
+) {
+    //empty constructor
+    constructor() : this(0, "", 0)
+}

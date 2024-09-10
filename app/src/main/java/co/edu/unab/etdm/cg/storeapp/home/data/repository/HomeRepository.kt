@@ -5,6 +5,7 @@ import co.edu.unab.etdm.cg.storeapp.core.data.network.FirebaseClient
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProduct
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProductEntity
+import co.edu.unab.etdm.cg.storeapp.product.datasource.ProductFirestoreDatasource
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,7 +16,7 @@ private const val COLLECTION_NAME_PRODUCTS = "products"
 
 class HomeRepository @Inject constructor(
     private val productDAO: ProductDAO,
-    private val firebaseClient: FirebaseClient
+    private val productFirestoreDatasource: ProductFirestoreDatasource
 ) {
     val products: Flow<List<Product>> = productDAO.getAllProducts().map { items ->
         items.map {
@@ -23,23 +24,16 @@ class HomeRepository @Inject constructor(
         }
     }
 
-    suspend fun productsFirestore(): QuerySnapshot? {
-        return firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS).get().await()
+    fun productsFirestore(): Flow<List<Product>> {
+        return productFirestoreDatasource.getAll()
     }
 
-    suspend fun saveProductFirestore(product: Product) {
-        val productEntity = product.toProductEntity()
-        firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
-            .document(productEntity.id.toString())
-            .set(productEntity)
-            .await()
+    fun saveProductFirestore(product: Product) {
+        productFirestoreDatasource.add(product)
     }
 
-    suspend fun deleteProductFirestore(product: Product) {
-        firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
-            .document(product.id.toString())
-            .delete()
-            .await()
+    fun deleteProductFirestore(product: Product) {
+        productFirestoreDatasource.delete(product)
     }
 
 
