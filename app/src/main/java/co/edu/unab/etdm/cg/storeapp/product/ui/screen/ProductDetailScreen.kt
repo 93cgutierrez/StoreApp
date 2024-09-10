@@ -49,6 +49,7 @@ fun ProductDetailScreen(
 ) {
     val productItem: Product by viewModel.getProductById(productId).observeAsState(
         initial = Product(
+            id = 0,
             name = "",
             price = 0
         )
@@ -56,7 +57,7 @@ fun ProductDetailScreen(
 
     val context: Context = LocalContext.current
 
-    if (productItem.id != null) {/*        LaunchedEffect(Unit) {
+    if (productItem.id != 0) {/*        LaunchedEffect(Unit) {
                   Toast.makeText(context, "$productItem", Toast.LENGTH_SHORT).show()
                 }*/
     } else {

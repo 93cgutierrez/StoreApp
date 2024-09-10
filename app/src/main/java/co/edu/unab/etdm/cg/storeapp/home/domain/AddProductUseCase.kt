@@ -5,8 +5,10 @@ import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import javax.inject.Inject
 
 class AddProductUseCase @Inject constructor(
-    private val productRepository: HomeRepository) {
+    private val productRepository: HomeRepository
+) {
     suspend operator fun invoke(product: Product) {
-        productRepository.saveProduct(product)
+        productRepository.saveProductFirestore(product)
+        //productRepository.saveProduct(product)
     }
 }

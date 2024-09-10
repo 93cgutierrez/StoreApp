@@ -10,16 +10,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductRegisterViewModel @Inject constructor(private val addProductUseCase: AddProductUseCase): ViewModel() {
+class ProductRegisterViewModel @Inject constructor(private val addProductUseCase: AddProductUseCase) :
+    ViewModel() {
 
     fun addProduct(name: String, price: String, description: String, image: String) {
         val product = Product(
+            //TODO: VALIDATE ID WHERE GENERATED IT ?
+            id = System.currentTimeMillis()
+                .hashCode(),  // auto generated id, replace with actual id when saving to the database.
             name = name,
             price = price.toInt(),
             description = description,
             image = image,
         )
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             addProductUseCase(product)
         }
 

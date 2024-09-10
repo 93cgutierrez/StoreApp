@@ -48,6 +48,7 @@ fun ProductUpdateScreen(
     val context: Context = LocalContext.current
     val productItem: Product by viewModel.getProductById(productId).observeAsState(
         initial = Product(
+            id = 0,
             name = "",
             price = 0
         )

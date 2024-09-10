@@ -6,7 +6,7 @@ import co.edu.unab.etdm.cg.storeapp.core.data.local.entity.ProductEntity
 //@Parcelize
 //@Serializable
 open class Product(
-    var id: Int? = null,  // Unique identifier for each product. In a real-world scenario, this would be a database ID.
+    var id: Int,  // Unique identifier for each product. In a real-world scenario, this would be a database ID.
     var name: String,
     var price: Int,
     var description: String = "Sin descripción",
@@ -14,6 +14,9 @@ open class Product(
 )
 //  : Parcelable
 {
+
+    //empty constructor
+    constructor() : this(0, "", 0)
 
     override fun toString(): String {
         return "id: $id name: $name, price: $price, description: $description and image: $image"

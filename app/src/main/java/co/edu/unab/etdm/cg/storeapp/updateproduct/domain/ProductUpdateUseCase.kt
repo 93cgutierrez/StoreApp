@@ -5,8 +5,9 @@ import co.edu.unab.etdm.cg.storeapp.updateproduct.data.repository.UpdateProductR
 import javax.inject.Inject
 
 class ProductUpdateUseCase @Inject constructor(
-    private val productRepository: UpdateProductRepository) {
+    private val productRepository: UpdateProductRepository
+) {
     suspend operator fun invoke(product: Product) {
-        productRepository.updateProduct(product)
+        productRepository.updateProductFirestore(product)
     }
 }
