@@ -26,7 +26,6 @@ class ProductRegisterViewModel @Inject constructor(private val addProductUseCase
         viewModelScope.launch(Dispatchers.IO) {
             addProductUseCase(product)
         }
-
     }
 
 }

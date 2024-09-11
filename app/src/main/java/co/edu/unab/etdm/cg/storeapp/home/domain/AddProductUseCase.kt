@@ -8,7 +8,8 @@ class AddProductUseCase @Inject constructor(
     private val productRepository: HomeRepository
 ) {
     suspend operator fun invoke(product: Product) {
-        productRepository.saveProductFirestore(product)
+        //productRepository.saveProductFirestore(product)
         //productRepository.saveProduct(product)
+        productRepository.saveProductAPI(product)
     }
 }

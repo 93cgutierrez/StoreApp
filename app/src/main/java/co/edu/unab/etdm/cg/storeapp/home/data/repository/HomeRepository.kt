@@ -5,6 +5,7 @@ import co.edu.unab.etdm.cg.storeapp.core.data.network.FirebaseClient
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProduct
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.toProductEntity
+import co.edu.unab.etdm.cg.storeapp.product.datasource.ProductAPIDatasource
 import co.edu.unab.etdm.cg.storeapp.product.datasource.ProductFirestoreDatasource
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,8 @@ private const val COLLECTION_NAME_PRODUCTS = "products"
 
 class HomeRepository @Inject constructor(
     private val productDAO: ProductDAO,
-    private val productFirestoreDatasource: ProductFirestoreDatasource
+    private val productFirestoreDatasource: ProductFirestoreDatasource,
+    private val productAPIDatasource: ProductAPIDatasource,
 ) {
     val products: Flow<List<Product>> = productDAO.getAllProducts().map { items ->
         items.map {
@@ -24,6 +26,7 @@ class HomeRepository @Inject constructor(
         }
     }
 
+    //Firestore
     fun productsFirestore(): Flow<List<Product>> {
         return productFirestoreDatasource.getAll()
     }
@@ -36,6 +39,18 @@ class HomeRepository @Inject constructor(
         productFirestoreDatasource.delete(product)
     }
 
+    //API
+    fun productsAPI(): Flow<List<Product>> {
+        return productAPIDatasource.getAll()
+    }
+
+    suspend fun saveProductAPI(product: Product) {
+        productAPIDatasource.add(product)
+    }
+
+    suspend fun deleteProductAPI(product: Product) {
+        productAPIDatasource.delete(product)
+    }
 
     suspend fun saveProduct(product: Product) {
         productDAO.addProduct(product.toProductEntity())

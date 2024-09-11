@@ -119,7 +119,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //Firebase authentication
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     //divider M3
@@ -129,6 +129,6 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     // Retrofit with Gson Converter
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.gson)
 
 }

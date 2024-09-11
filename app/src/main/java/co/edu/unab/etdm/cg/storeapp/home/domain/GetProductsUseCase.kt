@@ -17,6 +17,7 @@ class GetProductsUseCase @Inject constructor(private val homeRepository: HomeRep
                     emit(products)
                 }*/
         //FIRESTORE
-        return homeRepository.productsFirestore()
+        //return homeRepository.productsFirestore()
+        return homeRepository.productsAPI()
     }
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import co.edu.unab.etdm.cg.storeapp.home.domain.DeleteAllProductsUseCase
 import co.edu.unab.etdm.cg.storeapp.home.domain.DeleteProductUseCase
 import co.edu.unab.etdm.cg.storeapp.home.domain.GetProductsUseCase
-import co.edu.unab.etdm.cg.storeapp.home.domain.SaveProductsUseCase
 import co.edu.unab.etdm.cg.storeapp.home.ui.ProductsUIState
 import co.edu.unab.etdm.cg.storeapp.home.ui.ProductsUIState.Success
 import co.edu.unab.etdm.cg.storeapp.core.ui.model.Product
@@ -23,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
-    private val savedProductUseCase: SaveProductsUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase: DeleteAllProductsUseCase,
 ) : ViewModel() {
@@ -39,9 +37,9 @@ class HomeViewModel @Inject constructor(
         )
 
     fun deleteProduct(product: Product) {
-        //viewModelScope.launch(Dispatchers.IO) {
-        deleteProductUseCase(product)
-        // }
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteProductUseCase(product)
+        }
     }
 
     fun deleteAllProducts() {
