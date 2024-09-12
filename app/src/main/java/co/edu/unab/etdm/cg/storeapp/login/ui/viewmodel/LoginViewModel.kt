@@ -39,7 +39,9 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
     }
 
     fun onResetState() {
-        _uiState.value = LoginUIState.Default
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.emit(LoginUIState.Default)
+        }
     }
 
     fun verifyLogin() {
