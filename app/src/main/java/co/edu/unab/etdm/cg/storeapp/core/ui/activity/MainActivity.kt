@@ -1,6 +1,7 @@
 package co.edu.unab.etdm.cg.storeapp.core.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -42,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import co.edu.unab.etdm.cg.storeapp.product.ui.screen.ProductRegisterScreen
 import co.edu.unab.etdm.cg.storeapp.NavArgs
+import co.edu.unab.etdm.cg.storeapp.R
 import co.edu.unab.etdm.cg.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.cg.storeapp.home.ui.screen.HomeScreen
 import co.edu.unab.etdm.cg.storeapp.home.ui.viewmodel.HomeViewModel
@@ -72,6 +74,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        //get shared preferences
+        val isLogged = getSharedPreferences(
+            getString(R.string.prefs_name),
+            Context.MODE_PRIVATE
+        ).getBoolean("isLogged", false)
+
+        if (!isLogged) {
+            // go to login activity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         //coroutine
         lifecycleScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
@@ -175,7 +191,7 @@ class MainActivity : ComponentActivity() {
                     floatingActionButton = {
                         //TODO: LEAVE VIEWMODEL
                         val showAddButton: Boolean = true
-                        if(showAddButton) {
+                        if (showAddButton) {
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate(StoreAppDestinations.ProductRegisterDestination.route) {

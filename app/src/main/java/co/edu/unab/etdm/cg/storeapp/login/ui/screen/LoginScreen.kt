@@ -93,6 +93,14 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
 
         LoginUIState.Success -> {
             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+            //create shared preferences
+            val sharedPreferences = context.getSharedPreferences(
+                stringResource(R.string.prefs_name),
+                Context.MODE_PRIVATE
+            )
+                .edit()
+            sharedPreferences.putBoolean("isLogged", true).apply()
+
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
             (context as Activity).finish()

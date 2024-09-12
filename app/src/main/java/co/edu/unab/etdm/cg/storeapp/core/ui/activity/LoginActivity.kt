@@ -1,5 +1,7 @@
 package co.edu.unab.etdm.cg.storeapp.core.ui.activity
 
+import android.content.Context
+import android.content.Intent
 import co.edu.unab.etdm.cg.storeapp.login.ui.screen.LoginScreen
 import co.edu.unab.etdm.cg.storeapp.signup.ui.screen.RegisterScreen
 import android.os.Bundle
@@ -23,11 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import co.edu.unab.etdm.cg.storeapp.R
 import co.edu.unab.etdm.cg.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.cg.storeapp.login.ui.viewmodel.LoginViewModel
 import co.edu.unab.etdm.cg.storeapp.signup.ui.viewmodel.SignUpViewModel
@@ -69,11 +73,27 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         println("onCreate......")
         enableEdgeToEdge()
+        //get shared preferences
+        val isLogged = getSharedPreferences(
+            getString(R.string.prefs_name),
+            Context.MODE_PRIVATE
+        ).getBoolean("isLogged", false)
+
+        if (isLogged) {
+            // go to main activity
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         setContent {
             StoreAppTheme {
                 // navigation
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = StoreAppDestinations.LoginDestination.route) {
+                NavHost(
+                    navController = navController,
+                    startDestination = StoreAppDestinations.LoginDestination.route
+                ) {
                     composable(StoreAppDestinations.LoginDestination.route) {
                         LoginScreen(navController, loginViewModel)
                     }
