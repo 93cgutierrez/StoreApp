@@ -9,14 +9,16 @@ plugins {
     id("kotlin-kapt")
     //DI HILT
     id("com.google.dagger.hilt.android")
+    //GMS
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "co.edu.unab.etdm.eden.storeapp"
+    namespace = "co.edu.unab.etdm.cg.storeapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "co.edu.unab.etdm.eden.storeapp"
+        applicationId = "co.edu.unab.etdm.cg.storeapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -75,6 +77,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -113,4 +117,18 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
+
+    //Firebase authentication
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
+    //divider M3
+    implementation("androidx.compose.material:material:1.3.0")
+
+    //retrofit
+    // Retrofit
+    implementation(libs.retrofit)
+    // Retrofit with Gson Converter
+    implementation(libs.converter.gson)
+
 }
