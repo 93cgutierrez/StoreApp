@@ -5,4 +5,7 @@ data class UserEntity(
     var name: String,
     var document: Long,
     var email: String
-)
+) {
+    //empty constructor
+    constructor() : this("", "", 0, "")
+}

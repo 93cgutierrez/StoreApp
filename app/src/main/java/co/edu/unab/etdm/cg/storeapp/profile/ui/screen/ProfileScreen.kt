@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import co.edu.unab.etdm.cg.storeapp.R
 import co.edu.unab.etdm.cg.storeapp.core.ui.activity.LoginActivity
@@ -21,7 +20,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun ProfileScreen(profileViewModel: ProfileViewModel) {
+fun ProfileScreen(
+    modifier: Modifier,
+    profileViewModel: ProfileViewModel
+) {
     val context: Context = LocalContext.current
     Box(
         modifier = Modifier

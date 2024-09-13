@@ -243,7 +243,7 @@ fun FooterLogin(navController: NavController) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         })
-        Text(text = "No tienes cuenta?", modifier = Modifier
+        Text(text = stringResource(R.string.txt_message_register), modifier = Modifier
             .constrainAs(textSignUp) {
                 top.linkTo(divider.bottom)
                 start.linkTo(parent.start)
@@ -252,7 +252,7 @@ fun FooterLogin(navController: NavController) {
             }
             .padding(end = 8.dp))
         Text(
-            text = "Registrate acá!!!",
+            text = stringResource(R.string.txt_register_here),
             modifier = Modifier
                 .constrainAs(linkSignUp)
                 {

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -56,6 +57,8 @@ import co.edu.unab.etdm.cg.storeapp.profile.ui.viewmodel.ProfileViewModel
 import co.edu.unab.etdm.cg.storeapp.ui.theme.StoreAppTheme
 import co.edu.unab.etdm.cg.storeapp.updateproduct.screen.ProductUpdateScreen
 import co.edu.unab.etdm.cg.storeapp.updateproduct.viewmodel.ProductUpdateViewModel
+import co.edu.unab.etdm.cg.storeapp.user.ui.screen.UsersScreen
+import co.edu.unab.etdm.cg.storeapp.user.ui.viewmodel.UsersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,6 +69,7 @@ class MainActivity : ComponentActivity() {
     private val tag = "HomeScreen"
     private val homeViewModel: HomeViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val usersViewModel: UsersViewModel by viewModels()
     private val productDetailViewModel: ProductDetailViewModel by viewModels()
     private val productRegisterViewModel: ProductRegisterViewModel by viewModels()
     private val productUpdateViewModel: ProductUpdateViewModel by viewModels()
@@ -186,6 +190,37 @@ class MainActivity : ComponentActivity() {
                                             Color.White else Color.White,
                                     )
                                 })
+                            NavigationBarItem(
+                                selected = StoreAppDestinations.UsersDestination.route == currentScreen.route,
+                                onClick = {
+                                    Toast.makeText(context, "users", Toast.LENGTH_SHORT).show()
+                                    navController.navigate(StoreAppDestinations.UsersDestination.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.List,
+                                        contentDescription = "users",
+                                        tint = if (StoreAppDestinations.UsersDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.Blue else Color.White
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = "Users",
+                                        color = if (StoreAppDestinations.UsersDestination.route
+                                            == currentScreen.route
+                                        )
+                                            Color.White else Color.White,
+                                    )
+                                })
                         }
                     },
                     floatingActionButton = {
@@ -222,7 +257,17 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(StoreAppDestinations.ProfileDestination.route) {
-                            ProfileScreen(profileViewModel)
+                            ProfileScreen(
+                                Modifier.padding(innerPadding),
+                                profileViewModel
+                            )
+                        }
+                        composable(StoreAppDestinations.UsersDestination.route) {
+                            UsersScreen(
+                                navController,
+                                Modifier.padding(innerPadding),
+                                usersViewModel
+                            )
                         }
                         composable(
                             StoreAppDestinations.ProductDetailDestination.route,

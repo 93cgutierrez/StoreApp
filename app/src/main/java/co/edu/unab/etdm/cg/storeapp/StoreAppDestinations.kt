@@ -5,6 +5,7 @@ sealed class StoreAppDestinations(val title: String, val route: String) {
     data object RegisterDestination : StoreAppDestinations("Register", "register")
     data object HomeDestination : StoreAppDestinations("Products", "home")
     data object ProfileDestination : StoreAppDestinations("My profile", "profile")
+    data object UsersDestination : StoreAppDestinations("Users", "users")
     data object ProductDetailDestination :
         StoreAppDestinations(
             "Product Details",
@@ -12,19 +13,23 @@ sealed class StoreAppDestinations(val title: String, val route: String) {
         ) {
         fun createRoute(id: Int) = "product-detail/$id"
     }
-        data object ProductUpdateDestination :
+
+    data object ProductUpdateDestination :
         StoreAppDestinations(
             "Product Update",
             "product-update/{${NavArgs.ProductId.key}}"
         ) {
         fun createRoute(id: Int) = "product-update/$id"
     }
-    data object ProductRegisterDestination : StoreAppDestinations("Register Product", "product-register")
+
+    data object ProductRegisterDestination :
+        StoreAppDestinations("Register Product", "product-register")
 
     companion object {
         val mainScreens = listOf<StoreAppDestinations>(
             HomeDestination,
             ProfileDestination,
+            UsersDestination,
             ProductDetailDestination,
             ProductUpdateDestination,
             ProductRegisterDestination,

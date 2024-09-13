@@ -6,7 +6,8 @@ data class User(
     var id: String = "",
     var name: String,
     var document: Long,
-    var email: String
+    var email: String,
+    var image: String = "https://picsum.photos/seed/picsum/200/300",
 )
 
 fun User.toUserEntity(): UserEntity = UserEntity(
@@ -14,4 +15,12 @@ fun User.toUserEntity(): UserEntity = UserEntity(
     name = this.name,
     document = this.document,
     email = this.email,
+)
+
+fun UserEntity.toUser(): User = User(
+    id = this.id,
+    name = this.name,
+    document = this.document,
+    email = this.email,
+    image = "https://picsum.photos/seed/${this.id}/200/300",
 )
