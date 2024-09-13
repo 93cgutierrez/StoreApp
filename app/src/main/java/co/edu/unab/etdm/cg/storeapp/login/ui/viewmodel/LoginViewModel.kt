@@ -47,12 +47,16 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
 
     fun verifyLogin() {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.emit(
-                loginUseCase(
-                    email = email.value!!,
-                    password = password.value!!,
-                )
+            val authResult = loginUseCase(
+                email = email.value!!,
+                password = password.value!!,
             )
+            if (authResult != null && authResult.user != null) {
+                val uid = authResult.user!!.uid
+                _uiState.emit(LoginUIState.Success(uid))
+            } else {
+                _uiState.emit(LoginUIState.Error(Throwable(message = "Invalid email or password")))
+            }
         }
     }
 

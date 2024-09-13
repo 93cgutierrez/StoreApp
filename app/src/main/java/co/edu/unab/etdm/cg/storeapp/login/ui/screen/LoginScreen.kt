@@ -57,6 +57,7 @@ import co.edu.unab.etdm.cg.storeapp.StoreAppDestinations
 import co.edu.unab.etdm.cg.storeapp.core.ui.activity.MainActivity
 import co.edu.unab.etdm.cg.storeapp.login.ui.LoginUIState
 import co.edu.unab.etdm.cg.storeapp.login.ui.viewmodel.LoginViewModel
+import co.edu.unab.etdm.cg.storeapp.user.ui.UsersUIState
 import coil.compose.AsyncImage
 
 //@Preview(showBackground = true)
@@ -80,8 +81,10 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
             println("default state")
         }
 
-        LoginUIState.Error -> {
-            Toast.makeText(context, "Login Failure", Toast.LENGTH_SHORT).show()
+        is LoginUIState.Error -> {
+            val throwable = (uiState as LoginUIState.Error).throwable
+            Toast.makeText(context, "Login Failure: ${throwable.message}", Toast.LENGTH_SHORT)
+                .show()
             viewModel.onResetState()
         }
 
@@ -91,7 +94,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
             }
         }
 
-        LoginUIState.Success -> {
+        is LoginUIState.Success -> {
+            val uid = (uiState as LoginUIState.Success).uid
             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
             //create shared preferences
             val sharedPreferences = context.getSharedPreferences(
@@ -100,12 +104,19 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
             )
                 .edit()
             sharedPreferences.putBoolean("isLogged", true).apply()
+            sharedPreferences.putString("uid", uid).apply()
 
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
             (context as Activity).finish()
             viewModel.onResetState()
         }
+
+        LoginUIState.Empty -> {
+
+        }
+
+        LoginUIState.Idle -> {}
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
