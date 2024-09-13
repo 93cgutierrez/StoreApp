@@ -165,25 +165,25 @@ fun UserItem(user: User, onSelected: (User) -> Unit) {
                         end.linkTo(parent.end)
                     }
             )
+            /*            Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .size(40.dp)
+                                .background(Color.Black.copy(alpha = 0.6f))
+                                .constrainAs(document) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                },
+                            text = "${user.document}",
+                            textAlign = TextAlign.Center,
+                            fontSize = 25.sp,
+                            color = Color.White.copy(alpha = 0.9f),
+                        )*/
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(40.dp)
-                    .background(Color.Black.copy(alpha = 0.6f))
-                    .constrainAs(document) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                text = "${user.document}",
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp,
-                color = Color.White.copy(alpha = 0.9f),
-            )
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(80.dp)
+                    .size(70.dp)
                     .background(Color.Black.copy(alpha = 0.6f))
                     .constrainAs(name) {
                         top.linkTo(document.bottom)
@@ -194,6 +194,7 @@ fun UserItem(user: User, onSelected: (User) -> Unit) {
                 textAlign = TextAlign.Center,
                 fontSize = 25.sp,
                 maxLines = 2,
+                minLines = 1,
                 color = Color.White.copy(alpha = 0.9f),
             )
             Text(
@@ -208,7 +209,8 @@ fun UserItem(user: User, onSelected: (User) -> Unit) {
                     },
                 text = user.email,
                 textAlign = TextAlign.Center,
-                fontSize = 25.sp,
+                fontSize = 20.sp,
+                minLines = 1,
                 maxLines = 2,
                 color = Color.White.copy(alpha = 0.9f),
             )
