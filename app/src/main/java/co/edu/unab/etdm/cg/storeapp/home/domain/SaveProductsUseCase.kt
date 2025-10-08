@@ -6,6 +6,8 @@ import javax.inject.Inject
 
 class SaveProductsUseCase @Inject constructor(private val homeRepository: HomeRepository) {
     suspend operator fun invoke(products: List<Product>) {
-        homeRepository.saveProducts(products)
+        //FIRESTORE
+        homeRepository.saveProductsFirestore(products)
+        //homeRepository.saveProducts(products)
     }
 }

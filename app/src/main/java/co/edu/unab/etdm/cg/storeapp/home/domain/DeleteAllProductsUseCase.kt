@@ -5,6 +5,8 @@ import javax.inject.Inject
 
 class DeleteAllProductsUseCase @Inject constructor(private val homeRepository: HomeRepository) {
     suspend operator fun invoke() {
-        homeRepository.deleteAllProducts()
+        //FIRESTORE
+        homeRepository.deleteAllProductsFirestore()
+        //homeRepository.deleteAllProducts()
     }
 }

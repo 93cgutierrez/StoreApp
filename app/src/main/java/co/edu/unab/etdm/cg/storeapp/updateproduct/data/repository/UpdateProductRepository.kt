@@ -19,7 +19,8 @@ class UpdateProductRepository @Inject constructor(
     }
 
     suspend fun updateProductFirestore(product: Product) {
-        //productFirestoreDatasource.update(product)
-        productAPIDataSource.update(product)
+        //FIRESTORE
+        productFirestoreDatasource.update(product)
+        //productAPIDataSource.update(product)
     }
 }

@@ -1,13 +1,52 @@
 {
   "project_info": {
-    "project_number": "139389061832",
-    "project_id": "storeapp2024-82f6e",
-    "storage_bucket": "storeapp2024-82f6e.appspot.com"
+    "project_number": "1055432150502",
+    "firebase_url": "https://especializacion-mobile-default-rtdb.firebaseio.com",
+    "project_id": "especializacion-mobile",
+    "storage_bucket": "especializacion-mobile.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:139389061832:android:345d3d49a1ac1ee8a7b3fd",
+        "mobilesdk_app_id": "1:1055432150502:android:1576f5c707d3c48e235a27",
+        "android_client_info": {
+          "package_name": "co.com.cgingenieria.taller_final"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_uEwxlO0Jd47UFCnfinz-yVoO4lwDKPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055432150502:android:b0074606c31bad07235a27",
+        "android_client_info": {
+          "package_name": "co.edu.unab.damo.cg.storeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_uEwxlO0Jd47UFCnfinz-yVoO4lwDKPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055432150502:android:cea1dfa5720b0478235a27",
         "android_client_info": {
           "package_name": "co.edu.unab.etdm.cg.storeapp"
         }
@@ -15,7 +54,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBwxoXtQnM5bK9N4VbWQiv0pV_3Hx6I96g"
+          "current_key": "AIzaSyD_uEwxlO0Jd47UFCnfinz-yVoO4lwDKPY"
         }
       ],
       "services": {

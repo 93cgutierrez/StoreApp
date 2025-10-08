@@ -61,6 +61,12 @@ class ProductFirestoreDatasource @Inject constructor(private val firebaseClient:
             .set(productEntity)
     }
 
+    fun saveProducts(products: List<Product>) {
+        val productEntities = products.map { it.toProductEntity() }
+        firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
+            .add(productEntities)
+    }
+
     fun update(product: Product) {
         val productEntity = product.toProductEntity().copy(id = product.id)
         firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
@@ -75,4 +81,39 @@ class ProductFirestoreDatasource @Inject constructor(private val firebaseClient:
             .document(productEntity.id.toString())
             .delete()
     }
+
+    /*    fun deleteAllProducts() {
+            firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        document.reference.delete()
+                    }
+                }
+        }*/
+
+    fun deleteAllProducts() {
+        firebaseClient.firestoreDB.collection(COLLECTION_NAME_PRODUCTS)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch =
+                    firebaseClient.firestoreDB.batch() // Usamos un batch para borrar múltiples documentos de manera eficiente
+
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference) // Agregamos cada eliminación al batch
+                }
+
+                batch.commit() // Ejecutamos todas las eliminaciones en el batch
+                    .addOnSuccessListener {
+                        println("Todos los productos han sido eliminados.")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error al eliminar todos los productos: ${e.message}")
+                    }
+            }
+            .addOnFailureListener { e ->
+                println("Error al obtener la lista de productos: ${e.message}")
+            }
+    }
+
 }

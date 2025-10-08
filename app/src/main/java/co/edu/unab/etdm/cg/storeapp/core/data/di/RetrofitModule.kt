@@ -18,7 +18,7 @@ class RetrofitModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://storeappdamo2024-default-rtdb.firebaseio.com/")
+            .baseUrl("https://storeapp2024-82f6e-default-rtdb.firebaseio.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

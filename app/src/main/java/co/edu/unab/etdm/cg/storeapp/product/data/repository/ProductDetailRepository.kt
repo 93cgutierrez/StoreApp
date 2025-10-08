@@ -17,6 +17,6 @@ class ProductDetailRepository @Inject constructor(
 
     fun getProductByIdFirestore(productId: Int) = firestoreDatasource.getById(productId)
 
-    fun getProductByIdAPI(productId: Int) = productAPIDataSource.getById(productId)
+    //fun getProductByIdAPI(productId: Int) = productAPIDataSource.getById(productId)
 
 }

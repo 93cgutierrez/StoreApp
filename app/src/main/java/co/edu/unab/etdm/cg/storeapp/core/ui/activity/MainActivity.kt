@@ -225,7 +225,8 @@ class MainActivity : ComponentActivity() {
                     },
                     floatingActionButton = {
                         //TODO: LEAVE VIEWMODEL
-                        val showAddButton: Boolean = true
+                        val showAddButton: Boolean =
+                            StoreAppDestinations.HomeDestination.route == currentScreen.route
                         if (showAddButton) {
                             FloatingActionButton(
                                 onClick = {

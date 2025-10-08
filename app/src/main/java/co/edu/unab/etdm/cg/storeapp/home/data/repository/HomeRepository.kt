@@ -35,8 +35,16 @@ class HomeRepository @Inject constructor(
         productFirestoreDatasource.add(product)
     }
 
+    fun saveProductsFirestore(products: List<Product>) {
+        productFirestoreDatasource.saveProducts(products)
+    }
+
     fun deleteProductFirestore(product: Product) {
         productFirestoreDatasource.delete(product)
+    }
+
+    fun deleteAllProductsFirestore() {
+        productFirestoreDatasource.deleteAllProducts()
     }
 
     //API
